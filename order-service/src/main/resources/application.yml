@@ -1,0 +1,39 @@
+server:
+  port: 9090
+order:
+  kafka:
+    producer:
+      bootstrap-servers: http://localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      client-id: order-service
+      number-of-retries: 3
+      retries-backoff-ms-config: 1000
+      max-request-size-config: 10000000
+      acks-config: 1
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/project1
+    driver-class-name: org.postgresql.Driver
+    username: hydra
+    password: ctrls.123
+    hikari:
+      auto-commit: on
+      connection-timeout: 3000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  liquibase:
+    change-log: classpath:/db/order-service-liquibase-changeLog.xml
+payment:
+  service:
+    base-url: http://localhost:9091
+    create-payment: payment/processPayment
+
+
+
+

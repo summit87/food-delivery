@@ -1,0 +1,57 @@
+server:
+  port: 8084
+delivery:
+  kafka:
+    consumer:
+      bootstrap-servers:
+        - http://localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      client-id: delivery-service
+      concurrency: 10 # To create only one consumer
+      auto-offset-reset-config: latest
+      max-poll-record-config: 10
+      session-timeout: 30000
+      heartbeat-interval: 1000
+      consumer-group-id: delivery-service
+      enable-auto-commit: false
+    event:
+      restaurant:
+        delivery-init: INITIATE_DELIVERY
+    producer:
+      bootstrap-servers: http://localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      client-id: order-service
+      number-of-retries: 3
+      retries-backoff-ms-config: 1000
+      max-request-size-config: 10000000
+      acks-config: 1
+      topics-map:
+        delivery: DELIVERY_NOTIFICATION
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/project1
+    driver-class-name: org.postgresql.Driver
+    username: hydra
+    password: ctrls.123
+    hikari:
+      auto-commit: on
+      connection-timeout: 3000
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  liquibase:
+    change-log: classpath:/db/delivery-service.xml
+client:
+  order:
+    service:
+      base-url: http://localhost:9090
+      post-restaurant-status-path: restaurant/paymentStatus
+
+
+
