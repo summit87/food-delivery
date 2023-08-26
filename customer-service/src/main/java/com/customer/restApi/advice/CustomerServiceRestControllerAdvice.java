@@ -3,8 +3,10 @@ package com.customer.restApi.advice;
 import com.commons.enums.Response;
 import com.commons.response.ApiErrorResponse;
 import com.commons.utils.GenericBuilder;
+import com.customer.exception.CustomerDuplicateRecord;
 import com.customer.exception.CustomerNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 @RestController
+@Slf4j
 public class CustomerServiceRestControllerAdvice extends
         ResponseEntityExceptionHandler {
 
@@ -36,7 +39,8 @@ public class CustomerServiceRestControllerAdvice extends
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-
+    
+    //DataIntegrityViolationException
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Response> handleAllException5XX(Exception ex,
                                                           WebRequest request) throws JsonProcessingException {
@@ -51,7 +55,25 @@ public class CustomerServiceRestControllerAdvice extends
                 new Response.ResponseBuilder()
                         .responseBody(apiResponse)
                         .build();
-
+        log.error("", ex);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    @ExceptionHandler(value = {CustomerDuplicateRecord.class})
+    public ResponseEntity<Response> handleAllExceptionDataIntegrityViolationException(Exception ex,
+        WebRequest request) throws JsonProcessingException {
+        
+        ApiErrorResponse apiResponse = GenericBuilder
+            .of(ApiErrorResponse::new)
+            .with(ApiErrorResponse::setErrorType, ex.getClass().getName())
+            .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
+            .with(ApiErrorResponse::setErrorCode, "CS.PROFILE.0003")
+            .build();
+        Response response =
+            new Response.ResponseBuilder()
+                .responseBody(apiResponse)
+                .build();
+        log.error("", ex);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

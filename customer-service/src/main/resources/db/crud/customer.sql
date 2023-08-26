@@ -4,8 +4,8 @@
 
 create table if not exists customer_profile
 (
-    id      serial not null unique,
-    user_id varchar(100),
+    id      serial,
+    user_id varchar(100) not null unique,
     f_name  varchar(20),
     l_name  varchar(40),
     user_password       varchar(100),
@@ -19,7 +19,7 @@ create table if not exists customer_profile
     is_account_verified bool,
     create_ts           timestamp,
     last_updated_ts     timestamp,
-    primary key (user_id)
+    primary key (id)
 );
 
 

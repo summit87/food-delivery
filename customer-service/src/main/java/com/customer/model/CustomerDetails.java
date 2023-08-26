@@ -18,6 +18,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 public class CustomerDetails {
     CustomerProfile customerProfile;
-    private UserSecrets userSecrets;
+    UserSecrets userSecrets;
 
 }

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static com.customer.utils.Constants.RestApiConstants.CUSTOMER_PROFILE_MAPPING;
 
+
+@RestController
+@RequestMapping(path = CUSTOMER_PROFILE_MAPPING)
 public class CustomerProfileAPI implements ICustomerProfileRestApi{
 
 	private final CustomerProfileService customerProfileServiceImpl;
@@ -21,5 +24,10 @@ public class CustomerProfileAPI implements ICustomerProfileRestApi{
 	@Override
 	public void createUserProfile(CustomerDetails customerDetails, HttpHeaders headers) throws Exception {
 		customerProfileServiceImpl.saveCustomerProfile(customerDetails,headers);
+	}
+	
+	@Override
+	public CustomerDetails getCustomerProfileByUserId(String userId) throws Exception {
+		return customerProfileServiceImpl.findCustomerProfileByEmailId(userId);
 	}
 }

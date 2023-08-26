@@ -8,5 +8,5 @@ import reactor.core.publisher.Mono;
 public interface CustomerProfileService {
 	
 	void saveCustomerProfile(CustomerDetails customerDetails, HttpHeaders headers) throws Exception;
-	CustomerProfileEntity findCustomerProfileByEmailId(String emailId)throws Exception;
+	CustomerDetails findCustomerProfileByEmailId(String emailId)throws Exception;
 }
