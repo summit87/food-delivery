@@ -15,6 +15,7 @@
         <module>delivery-service</module>
         <module>commons</module>
         <module>notification-service</module>
+        <module>customer-service</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

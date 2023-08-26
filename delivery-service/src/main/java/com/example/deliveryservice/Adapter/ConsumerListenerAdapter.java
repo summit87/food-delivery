@@ -54,6 +54,14 @@ public class ConsumerListenerAdapter {
           "Message processing completed for topic {} , partition {},offset {},order id {}, restaurant id {} ",
           consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(),
           restaurantOrderDetails.getOrderId(), restaurantOrderDetails.getRestaurantId());
+      /**
+       * 1. Send customer details
+       *  a. Customer name, primary/secondary mobile , address
+       * 2. Send order details
+       *  a. Order id, Order status,
+       * 3. Send Restaurant details
+       *  a. Restaurant name , restaurant address , waiting time, Order status
+       */
       acknowledgment.acknowledge();
     } catch (Exception exception) {
       log.error("Error while consuming message for topic {} ,partition {}, offset {} ",

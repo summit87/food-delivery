@@ -1,4 +1,4 @@
-package com.commons.model;
+package com.commons.customer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

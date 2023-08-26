@@ -1,4 +1,4 @@
-package com.commons.model;
+package com.commons.customer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -11,10 +11,11 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class CustomerDetails {
+public class CustomerAddress {
 	
-	private CustomerAddress customerAddress;
-	private CustomerContact customerContact;
-	
+	String houseNumber;
+	String streetName;
+	String nearestLandMark;
+	String pinCode;
 	
 }

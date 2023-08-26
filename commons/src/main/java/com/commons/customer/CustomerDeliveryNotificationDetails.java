@@ -1,7 +1,10 @@
-package com.commons.model;
+package com.commons.customer;
 
+
+import com.commons.model.DeliveryBoyDetails;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,11 +14,10 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
-public class CustomerAddress {
+public class CustomerDeliveryNotificationDetails {
 	
-	String name;
-	String streetName;
-	String nearestLandMark;
-	String pinCode;
+	List<DeliveryBoyDetails> deliveryBoyDetails;
+	CustomerDetails customerDetails;
 	
+
 }
