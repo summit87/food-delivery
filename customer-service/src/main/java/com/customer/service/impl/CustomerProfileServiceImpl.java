@@ -2,7 +2,9 @@ package com.customer.service.impl;
 
 import com.customer.dao.CustomerProfileRepository;
 import com.customer.entity.CustomerProfileEntity;
+import com.customer.model.CustomerDetails;
 import com.customer.service.CustomerProfileService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 
@@ -17,12 +19,12 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
     }
 
     @Override
-    public void saveCustomerProfile(CustomerProfileEntity customerProfileEntity) {
-        customerProfileRepository.save(customerProfileEntity);
+    public void saveCustomerProfile(CustomerDetails customerDetails, HttpHeaders headers) throws Exception {
+
     }
 
     @Override
-    public CustomerProfileEntity findCustomerProfileByEmailId(String emailId) {
+    public CustomerProfileEntity findCustomerProfileByEmailId(String emailId) throws Exception {
         CustomerProfileEntity customerProfileEntityMono
                 = customerProfileRepository.findById(emailId).orElseThrow(
                 () -> new RuntimeException(String.format("User id %s not found", emailId)));
