@@ -15,6 +15,6 @@ public class CustomerContact {
 	
 	private String primaryMobileNumber;
 	private String secondaryMobileNumber;
-	private String emailAddress;
+	private String userId;
 
 }

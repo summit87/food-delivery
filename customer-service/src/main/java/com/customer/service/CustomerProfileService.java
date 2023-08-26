@@ -1,5 +1,10 @@
 package com.customer.service;
 
-public interface CustomerProfileService {
+import com.customer.entity.CustomerProfileEntity;
+import reactor.core.publisher.Mono;
 
+public interface CustomerProfileService {
+	
+	void saveCustomerProfile(CustomerProfileEntity customerProfileEntity);
+	CustomerProfileEntity findCustomerProfileByEmailId(String emailId);
 }

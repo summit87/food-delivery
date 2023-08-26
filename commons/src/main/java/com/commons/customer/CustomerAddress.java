@@ -16,6 +16,6 @@ public class CustomerAddress {
 	String houseNumber;
 	String streetName;
 	String nearestLandMark;
-	String pinCode;
+	String zipCode;
 	
 }
