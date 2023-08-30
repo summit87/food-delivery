@@ -58,8 +58,13 @@ public class RestaurantCommandReceiver {
         consumerRecord.offset());
     RestaurantOrder order =
         restaurantOrderService.acceptEventAndProcessMessage(restaurantEventDetails);
-    acknowledgment.acknowledge();
-    log.info(
+	  
+	  /**
+	   * 1. Send ack for acceptance by restaurant to order service
+	   * 3.
+	   */
+	  
+	  log.info(
         "Transaction committed for the order id {} ,restaurant id {} in partition {} , offset {}",
         order.getOrderId(),
         order.getRestaurantId(),
@@ -71,6 +76,7 @@ public class RestaurantCommandReceiver {
         order.getRestaurantId(),
         order.getOrderId());
     restaurantProducerUtils.publish(order);
+	  acknowledgment.acknowledge();
   }
 
 	private Map<String, String> getCommandMapping(

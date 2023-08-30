@@ -72,7 +72,7 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
         CustomerProfileEntity profileEntity
                 = customerProfileRepository.findById(emailId).orElseThrow(
                 () -> new RuntimeException(String.format("User id %s not found", emailId)));
-        CustomerDetails details = GenericBuilder.of(CustomerDetails::new)
+        return GenericBuilder.of(CustomerDetails::new)
             .with(CustomerDetails::setCustomerProfile, GenericBuilder.of(CustomerProfile::new)
                 .with(CustomerProfile::setCustomerContact,
                     GenericBuilder.of(CustomerContact::new).build())
@@ -81,6 +81,5 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
                 .with(CustomerProfile::setName, GenericBuilder.of(Name::new).build())
                 .build())
             .build();
-        return details;
     }
 }
