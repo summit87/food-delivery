@@ -1,11 +1,12 @@
 package com.commons.enums;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.util.ObjectUtils;
 
+@Getter
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,15 +18,7 @@ public class Response<T> {
 		this.responseStatus = builder.responseStatus;
 		this.responseBody = builder.responseBody;
 	}
-
-	public ResponseStatus getResponseStatus() {
-		return responseStatus;
-	}
-
-	public T getResponseBody() {
-		return responseBody;
-	}
-
+	
 	public static class ResponseBuilder<T> {
 		private ResponseStatus responseStatus;
 		private T responseBody;
@@ -34,19 +27,19 @@ public class Response<T> {
 
 		}
 
-		public ResponseBuilder status(Status status, String statusCode) {
+		public ResponseBuilder<T> status(Status status, String statusCode) {
 			this.responseStatus = new ResponseStatus(status, statusCode);
 			return this;
 		}
 
-		public ResponseBuilder responseBody(T o){
+		public ResponseBuilder<T> responseBody(T o){
 			if (!ObjectUtils.isEmpty(o)) {
 				this.responseBody = o;
 			}
 			return this;
 		}
 
-		public Response build() {
+		public Response<T> build() {
 			return new Response<T>(this);
 		}
 	}

@@ -44,7 +44,7 @@ public class PaymentServiceClient {
 			try {
 				ParameterizedTypeReference<Response<PaymentResponse>>
 					parameterizedTypeReference =
-					new ParameterizedTypeReference<Response<PaymentResponse>>() {
+					new ParameterizedTypeReference<>() {
 					};
 				return restTemplate.exchange(url, HttpMethod.POST, entity,
 					parameterizedTypeReference);

@@ -1,6 +1,7 @@
 package com.customer.restApi.advice;
 
 import com.commons.enums.Response;
+import com.commons.enums.Response.ResponseBuilder;
 import com.commons.response.ApiErrorResponse;
 import com.commons.utils.GenericBuilder;
 import com.customer.exception.CustomerDuplicateRecord;
@@ -23,7 +24,7 @@ public class CustomerServiceRestControllerAdvice extends
 
     @ExceptionHandler(value = {CustomerNotFoundException.class})
 
-    public ResponseEntity<Response> handleAllException(Exception ex,
+    public ResponseEntity<Response<ApiErrorResponse>> handleAllException(Exception ex,
                                                        WebRequest request) throws JsonProcessingException {
 
         ApiErrorResponse apiResponse = GenericBuilder
@@ -32,7 +33,7 @@ public class CustomerServiceRestControllerAdvice extends
                 .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
                 .with(ApiErrorResponse::setErrorCode, "OS.GET.0001")
                 .build();
-        Response response =
+        Response<ApiErrorResponse> response =
                 new Response.ResponseBuilder<ApiErrorResponse>()
                         .responseBody(apiResponse)
                         .build();
@@ -40,9 +41,8 @@ public class CustomerServiceRestControllerAdvice extends
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
     
-    //DataIntegrityViolationException
     @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<Response> handleAllException5XX(Exception ex,
+    public ResponseEntity<Response<ApiErrorResponse>> handleAllException5XX(Exception ex,
                                                           WebRequest request) throws JsonProcessingException {
 
         ApiErrorResponse apiResponse = GenericBuilder
@@ -51,8 +51,8 @@ public class CustomerServiceRestControllerAdvice extends
                 .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
                 .with(ApiErrorResponse::setErrorCode, "OS.GET.0002")
                 .build();
-        Response response =
-                new Response.ResponseBuilder()
+        Response<ApiErrorResponse> response =
+                new ResponseBuilder<ApiErrorResponse>()
                         .responseBody(apiResponse)
                         .build();
         log.error("", ex);
@@ -60,7 +60,7 @@ public class CustomerServiceRestControllerAdvice extends
     }
     
     @ExceptionHandler(value = {CustomerDuplicateRecord.class})
-    public ResponseEntity<Response> handleAllExceptionDataIntegrityViolationException(Exception ex,
+    public ResponseEntity<Response<ApiErrorResponse>> handleAllExceptionDataIntegrityViolationException(Exception ex,
         WebRequest request) throws JsonProcessingException {
         
         ApiErrorResponse apiResponse = GenericBuilder
@@ -69,8 +69,8 @@ public class CustomerServiceRestControllerAdvice extends
             .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
             .with(ApiErrorResponse::setErrorCode, "CS.PROFILE.0003")
             .build();
-        Response response =
-            new Response.ResponseBuilder()
+        Response<ApiErrorResponse> response =
+            new Response.ResponseBuilder<ApiErrorResponse>()
                 .responseBody(apiResponse)
                 .build();
         log.error("", ex);

@@ -57,7 +57,7 @@ public class RestaurantCommandReceiver {
         consumerRecord.partition(),
         consumerRecord.offset());
     RestaurantOrder order =
-        restaurantOrderService.acceptEventAndUpdateOrder(restaurantEventDetails);
+        restaurantOrderService.acceptEventAndProcessMessage(restaurantEventDetails);
     acknowledgment.acknowledge();
     log.info(
         "Transaction committed for the order id {} ,restaurant id {} in partition {} , offset {}",

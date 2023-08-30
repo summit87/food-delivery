@@ -26,7 +26,7 @@ public class RestaurantOrderServiceImpl
 	}
 
 	@Override
-	public Response createOrderForRestaurant(
+	public Response<RestaurantOrder> createOrderForRestaurant(
 			RestaurantOrderDetails restaurantOrderDetails)
 			throws JsonProcessingException {
 		RestaurantOrder restaurantOrder =
@@ -41,14 +41,14 @@ public class RestaurantOrderServiceImpl
 						.build();
 		restaurantOrderDAO.save(restaurantOrder);
 
-		return new Response.ResponseBuilder()
+		return new Response.ResponseBuilder<RestaurantOrder>()
 				.status(Status.SUCCESS, "0001")
 				.responseBody(restaurantOrder).build();
 	}
 
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
-	public Response updateRestaurantOrder(String orderId,
+	public Response<UpdateRestaurantOrderResponse> updateRestaurantOrder(String orderId,
 			UpdateRestaurantOrderRequest order) {
 		Optional<RestaurantOrder> optionalRestaurantOrder =
 				restaurantOrderDAO.findById(orderId);

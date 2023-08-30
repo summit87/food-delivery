@@ -21,7 +21,7 @@ public class RestaurantAcceptOrderServiceImpl implements RestaurantOrderService 
   }
 
   @Override
-  public RestaurantOrder acceptEventAndUpdateOrder(RestaurantEventDetails restaurantEventDetails) {
+  public RestaurantOrder acceptEventAndProcessMessage(RestaurantEventDetails restaurantEventDetails) {
 
     RestaurantOrder restaurantOrder =
         GenericBuilder.of(RestaurantOrder::new)
