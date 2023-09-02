@@ -32,7 +32,7 @@ public class OrderServiceController implements IOrderServiceController {
 	}
 
 	@Override
-	public Response updatePaymentStatus(
+	public Response<PaymentStatusResponse> updatePaymentStatus(
 			PaymentStatusRequest paymentStatusRequest, HttpHeaders headers)
 			throws JsonProcessingException {
 		try {
@@ -49,7 +49,7 @@ public class OrderServiceController implements IOrderServiceController {
 	}
 
 	@Override
-	public Response getOrderStatusByOrderId(String orderId)
+	public Response<OrderMetaInfo> getOrderStatusByOrderId(String orderId)
 			throws JsonProcessingException {
 		try {
 			OrderMetaInfo orderMetaInfo =

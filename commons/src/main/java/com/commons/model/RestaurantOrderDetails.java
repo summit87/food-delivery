@@ -24,18 +24,25 @@ public class RestaurantOrderDetails {
 
   @JsonProperty
   String orderId;
+  
   @JsonProperty
   String restaurantId;
+  
   @JsonProperty
   PaymentStatus paymentStatus;
+  
   @JsonProperty
   DeliveryStatus deliveryStatus;
+  
   @JsonProperty
   RestaurantOrderStatus restaurantOrderStatus;
+  
   @JsonProperty
   private BigDecimal totalDeliveryCharge;
+  
   @JsonProperty
   Instant createTs;
+  
   @JsonProperty
   String createdBy;
 

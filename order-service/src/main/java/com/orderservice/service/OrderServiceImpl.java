@@ -152,7 +152,7 @@ public class OrderServiceImpl implements IOrderService {
 
 		Optional<OrderDetails> optionalOrderDetails = orderServiceDAO.findById(
 				paymentStatusRequest.getOrderId());
-		if (!optionalOrderDetails.isPresent()) {
+		if (optionalOrderDetails.isEmpty()) {
 
 			log.error("Received payment status for order id {} not exist",
 					paymentStatusRequest.getOrderId());
@@ -169,9 +169,8 @@ public class OrderServiceImpl implements IOrderService {
 		log.info(
 				"Payment status updated for for order id {} and payment status {}",
 				paymentStatusRequest.getOrderId(), toOrderStatus.name());
-
-		PaymentStatusResponse build =
-				GenericBuilder.of(PaymentStatusResponse::new)
+		
+		return GenericBuilder.of(PaymentStatusResponse::new)
 						.with(PaymentStatusResponse::setPaymentStatus,
 								toOrderStatus)
 						.with(PaymentStatusResponse::setOrderId,
@@ -179,34 +178,31 @@ public class OrderServiceImpl implements IOrderService {
 						.with(PaymentStatusResponse::setTxnId,
 								paymentStatusRequest.getTxnId())
 						.build();
-		return build;
 	}
 
 	@Override
 	public OrderMetaInfo findOrderStatusByOrderId(String orderId) {
 		Optional<OrderDetails> orderDetails = orderServiceDAO.findById(orderId);
-		if (!orderDetails.isPresent()) {
+		if (orderDetails.isEmpty()) {
 			throw new OrderNotFoundException(
 					String.format("Order not found for given order id %s",
 							orderId));
 		}
 
 		OrderDetails orderDetails1 = orderDetails.get();
-		OrderMetaInfo orderMetaInfo = GenericBuilder.of(OrderMetaInfo::new)
+		
+		return GenericBuilder.of(OrderMetaInfo::new)
 				.with(OrderMetaInfo::setOrderStatusEnum,
 						orderDetails1.getOrderStatusEnum())
 				.with(OrderMetaInfo::setPaymentStatus,
 						orderDetails1.getPaymentStatus())
-				.with(OrderMetaInfo::setTotalPayedAmount,
-						orderDetails1.getTotalAmountNeedToPay())
 				.with(OrderMetaInfo::setItemMetaInfos,
 						itemServiceImpl.getItemMetaInfos(
 								orderDetails1.getOrderItemDetails()
 										.stream()
-										.map(orderItemDetails -> orderItemDetails.getItemId())
+									.map(OrderItemDetails::getItemId)
 										.collect(Collectors.toList())))
 				.build();
-		return orderMetaInfo;
 	}
 
 	private String createOrderId() {
