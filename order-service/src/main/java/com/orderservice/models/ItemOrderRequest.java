@@ -12,5 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemOrderRequest {
+	
 	private String itemId;
 }

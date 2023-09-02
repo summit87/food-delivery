@@ -9,9 +9,9 @@ import org.springframework.kafka.annotation.EnableKafka;
 @EnableJpaAuditing
 @EnableKafka
 public class OrderServiceApplication {
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(OrderServiceApplication.class, args);
 	}
-
+	
 }

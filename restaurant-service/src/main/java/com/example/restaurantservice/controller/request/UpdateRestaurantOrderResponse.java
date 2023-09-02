@@ -8,7 +8,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Setter
 public class UpdateRestaurantOrderResponse {
-
+	
 	private String orderId;
 	private String message;
 }

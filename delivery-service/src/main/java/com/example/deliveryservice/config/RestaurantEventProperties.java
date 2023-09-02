@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Getter
 public class RestaurantEventProperties {
-
-  private String deliveryInit;
-
+	
+	private String deliveryInit;
+	
 }

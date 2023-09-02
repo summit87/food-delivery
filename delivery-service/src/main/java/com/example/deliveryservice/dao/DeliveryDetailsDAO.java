@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeliveryDetailsDAO extends JpaRepository<DeliveryDetails, DeliveryDetailsPk> {
-
-  DeliveryDetails findDeliveryDetailsByPaymentStatus(PaymentStatus paymentStatus);
-
-  DeliveryDetails findDeliveryDetailsByDeliveryStatus(DeliveryStatus deliveryStatus);
-
+	
+	DeliveryDetails findDeliveryDetailsByPaymentStatus(PaymentStatus paymentStatus);
+	
+	DeliveryDetails findDeliveryDetailsByDeliveryStatus(DeliveryStatus deliveryStatus);
+	
 }

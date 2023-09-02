@@ -22,14 +22,14 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDeliveryDetails extends AuditModel {
-  
-  @Id
-  @Column(name = "order_delivery_id")
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer orderDeliveryId;
-  @Column(name = "delivery_id")
-  private Integer deliveryId;
-  @Column(name = "delivery_status")
-  private OrderStatusEnum orderStatusEnum;
-  
+	
+	@Id
+	@Column(name = "order_delivery_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer orderDeliveryId;
+	@Column(name = "delivery_id")
+	private Integer deliveryId;
+	@Column(name = "delivery_status")
+	private OrderStatusEnum orderStatusEnum;
+	
 }

@@ -18,11 +18,11 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DeliveryDetailsPk implements Serializable {
-
-  @Column(name = "order_id")
-  String orderId;
-
-  @Column(name = "restaurant_id")
-  String restaurantId;
-
+	
+	@Column(name = "order_id")
+	String orderId;
+	
+	@Column(name = "restaurant_id")
+	String restaurantId;
+	
 }

@@ -16,5 +16,5 @@ public class RestaurantContact {
 	private String primaryMobileNumber;
 	private String secondaryMobileNumber;
 	private String emailAddress;
-
+	
 }

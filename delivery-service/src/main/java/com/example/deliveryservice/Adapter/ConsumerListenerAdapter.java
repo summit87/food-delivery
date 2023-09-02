@@ -16,57 +16,60 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ConsumerListenerAdapter {
-  
-  private final ObjectMapper objectMapper;
-  private final DeliveryService deliveryServiceImpl;
-  
-  public ConsumerListenerAdapter(ObjectMapper objectMapper, DeliveryService deliveryServiceImpl) {
-    this.objectMapper = objectMapper;
-    this.deliveryServiceImpl = deliveryServiceImpl;
-  }
-  
-  
-  @Transactional(rollbackOn = Exception.class)
-  public void consumeAndProcess(ConsumerRecord<String, String> consumerRecord,
-      Acknowledgment acknowledgment) {
-    try {
-      
-      RestaurantOrderDetails restaurantOrderDetails
-          = objectMapper.readValue(consumerRecord.value(), RestaurantOrderDetails.class);
-      log.info(
-          "Message consumed from topic {} , partition {},offset {},order id {}, restaurant id {} ",
-          consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(),
-          restaurantOrderDetails.getOrderId(), restaurantOrderDetails.getRestaurantId());
-      
-      DeliveryDetailsPk pk = GenericBuilder.of(DeliveryDetailsPk::new)
-          .with(DeliveryDetailsPk::setOrderId, restaurantOrderDetails.getOrderId())
-          .with(DeliveryDetailsPk::setRestaurantId, restaurantOrderDetails.getRestaurantId())
-          .build();
-      DeliveryDetails deliveryDetails = GenericBuilder.of(DeliveryDetails::new)
-          .with(DeliveryDetails::setDeliveryDetailsPk, pk)
-          .with(DeliveryDetails::setDeliveryStatus, restaurantOrderDetails.getDeliveryStatus())
-          .with(DeliveryDetails::setPaymentStatus, restaurantOrderDetails.getPaymentStatus())
-          .with(DeliveryDetails::setDeliveryCharge, restaurantOrderDetails.getTotalDeliveryCharge())
-          .build();
-      deliveryServiceImpl.saveDelivery(deliveryDetails);
-      
-      log.info(
-          "Message processing completed for topic {} , partition {},offset {},order id {}, restaurant id {} ",
-          consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(),
-          restaurantOrderDetails.getOrderId(), restaurantOrderDetails.getRestaurantId());
-      /**
-       * 1. Send customer details
-       *  a. Customer name, primary/secondary mobile , address
-       * 2. Send order details
-       *  a. Order id, Order status,
-       * 3. Send Restaurant details
-       *  a. Restaurant name , restaurant address , waiting time, Order status
-       */
-      acknowledgment.acknowledge();
-    } catch (Exception exception) {
-      log.error("Error while consuming message for topic {} ,partition {}, offset {} ",
-          consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(), exception);
-      acknowledgment.acknowledge();
-    }
-  }
+	
+	private final ObjectMapper objectMapper;
+	private final DeliveryService deliveryServiceImpl;
+	
+	public ConsumerListenerAdapter(ObjectMapper objectMapper, DeliveryService deliveryServiceImpl) {
+		this.objectMapper = objectMapper;
+		this.deliveryServiceImpl = deliveryServiceImpl;
+	}
+	
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void consumeAndProcess(ConsumerRecord<String, String> consumerRecord,
+		Acknowledgment acknowledgment) {
+		try {
+			
+			RestaurantOrderDetails restaurantOrderDetails
+				= objectMapper.readValue(consumerRecord.value(), RestaurantOrderDetails.class);
+			log.info(
+				"Message consumed from topic {} , partition {},offset {},order id {}, restaurant id {} ",
+				consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(),
+				restaurantOrderDetails.getOrderId(), restaurantOrderDetails.getRestaurantId());
+			
+			DeliveryDetailsPk pk = GenericBuilder.of(DeliveryDetailsPk::new)
+				.with(DeliveryDetailsPk::setOrderId, restaurantOrderDetails.getOrderId())
+				.with(DeliveryDetailsPk::setRestaurantId, restaurantOrderDetails.getRestaurantId())
+				.build();
+			DeliveryDetails deliveryDetails = GenericBuilder.of(DeliveryDetails::new)
+				.with(DeliveryDetails::setDeliveryDetailsPk, pk)
+				.with(DeliveryDetails::setDeliveryStatus,
+					restaurantOrderDetails.getDeliveryStatus())
+				.with(DeliveryDetails::setPaymentStatus, restaurantOrderDetails.getPaymentStatus())
+				.with(DeliveryDetails::setDeliveryCharge,
+					restaurantOrderDetails.getTotalDeliveryCharge())
+				.build();
+			deliveryServiceImpl.saveDelivery(deliveryDetails);
+			
+			log.info(
+				"Message processing completed for topic {} , partition {},offset {},order id {}, restaurant id {} ",
+				consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(),
+				restaurantOrderDetails.getOrderId(), restaurantOrderDetails.getRestaurantId());
+			/**
+			 * 1. Send customer details
+			 *  a. Customer name, primary/secondary mobile , address
+			 * 2. Send order details
+			 *  a. Order id, Order status,
+			 * 3. Send Restaurant details
+			 *  a. Restaurant name , restaurant address , waiting time, Order status
+			 */
+			acknowledgment.acknowledge();
+		} catch (Exception exception) {
+			log.error("Error while consuming message for topic {} ,partition {}, offset {} ",
+				consumerRecord.topic(), consumerRecord.partition(), consumerRecord.offset(),
+				exception);
+			acknowledgment.acknowledge();
+		}
+	}
 }

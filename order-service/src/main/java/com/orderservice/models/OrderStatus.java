@@ -3,11 +3,10 @@ package com.orderservice.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.math.BigDecimal;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.Instant;
 
 
 @Getter
@@ -16,6 +15,7 @@ import java.time.Instant;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 public class OrderStatus {
+	
 	private Enum status;
 	private String message;
 	private Instant instant;

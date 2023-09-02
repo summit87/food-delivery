@@ -15,18 +15,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(
-        value = {"createdAt", "updatedAt"},
-        allowGetters = true
+	value = {"createdAt", "updatedAt"},
+	allowGetters = true
 )
 public class AuditModel implements Serializable {
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_ts", nullable = false, updatable = false)
-    @CreatedDate
-    private Date createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_updated_ts", nullable = false)
-    @LastModifiedDate
-    private Date updatedAt;
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_ts", nullable = false, updatable = false)
+	@CreatedDate
+	private Date createdAt;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "last_updated_ts", nullable = false)
+	@LastModifiedDate
+	private Date updatedAt;
+	
 }

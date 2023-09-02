@@ -27,65 +27,66 @@ import org.springframework.retry.support.RetryTemplate;
 
 @Configuration
 public class ConsumerConfiguration {
-	private ConsumerProperties consumerProperties;
+	
 	private final ConsumerRetriedMessageRecovery recoveryCallback;
 	private final RetryTemplate kafkaRetryTemplate;
-
+	private ConsumerProperties consumerProperties;
+	
 	public ConsumerConfiguration(ConsumerProperties consumerProperties,
-			ConsumerRetriedMessageRecovery recoveryCallback,
-			RetryTemplate kafkaRetryTemplate) {
+		ConsumerRetriedMessageRecovery recoveryCallback,
+		RetryTemplate kafkaRetryTemplate) {
 		this.consumerProperties = consumerProperties;
 		this.recoveryCallback = recoveryCallback;
 		this.kafkaRetryTemplate = kafkaRetryTemplate;
 	}
-
+	
 	private Map<String, Object> consumerProperties() throws IOException {
 		Map<String, Object> propMapping = new HashMap<>();
 		propMapping.put(BOOTSTRAP_SERVERS_CONFIG,
-				consumerProperties.getBootstrapServers());
+			consumerProperties.getBootstrapServers());
 		propMapping.put(VALUE_DESERIALIZER_CLASS_CONFIG,
-				consumerProperties.getValueDeserializer());
+			consumerProperties.getValueDeserializer());
 		propMapping.put(KEY_DESERIALIZER_CLASS_CONFIG,
-				consumerProperties.getKeyDeserializer());
+			consumerProperties.getKeyDeserializer());
 		propMapping.put(ENABLE_AUTO_COMMIT_CONFIG,
-				consumerProperties.isEnableAutoCommit());
+			consumerProperties.isEnableAutoCommit());
 		propMapping.put(GROUP_ID_CONFIG,
-				consumerProperties.getConsumerGroupId());
+			consumerProperties.getConsumerGroupId());
 		propMapping.put(CLIENT_ID_CONFIG, consumerProperties.getClientId());
 		propMapping.put(AUTO_OFFSET_RESET_CONFIG,
-				consumerProperties.getAutoOffsetResetConfig());
+			consumerProperties.getAutoOffsetResetConfig());
 		propMapping.put(MAX_POLL_RECORDS_CONFIG,
-				consumerProperties.getMaxPollRecordConfig());
+			consumerProperties.getMaxPollRecordConfig());
 		propMapping.put(HEARTBEAT_INTERVAL_MS_CONFIG,
-				consumerProperties.getHeartbeatInterval());
+			consumerProperties.getHeartbeatInterval());
 		propMapping.put(SESSION_TIMEOUT_MS_CONFIG,
-				consumerProperties.getSessionTimeout());
+			consumerProperties.getSessionTimeout());
 		return propMapping;
 	}
-
+	
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory()
-			throws IOException {
+		throws IOException {
 		ConcurrentKafkaListenerContainerFactory<String, String>
-				containerFactory =
-				new ConcurrentKafkaListenerContainerFactory<>();
+			containerFactory =
+			new ConcurrentKafkaListenerContainerFactory<>();
 		containerFactory.setRecoveryCallback(recoveryCallback);
 		containerFactory.setRetryTemplate(kafkaRetryTemplate);
 		containerFactory.setConcurrency(consumerProperties.getConcurrency());
 		containerFactory.setConsumerFactory(consumerFactory());
 		containerFactory.getContainerProperties()
-				.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+			.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 		return containerFactory;
 	}
-
+	
 	@Bean
 	public ConsumerFactory<String, Object> consumerFactory()
-			throws IOException {
-
+		throws IOException {
+		
 		DefaultKafkaConsumerFactory<String, Object> consumerFactory =
-				new DefaultKafkaConsumerFactory<>(
-						consumerProperties());
+			new DefaultKafkaConsumerFactory<>(
+				consumerProperties());
 		return consumerFactory;
 	}
-
+	
 }

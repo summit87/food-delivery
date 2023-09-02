@@ -17,7 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 @RestController
 public class PaymentControllerAdvice {
 	
-	@ExceptionHandler(value = { PaymentFailedException.class })
+	@ExceptionHandler(value = {PaymentFailedException.class})
 	
 	public ResponseEntity<Response> handleAllException(Exception ex,
 		WebRequest request) throws JsonProcessingException {
@@ -36,7 +36,7 @@ public class PaymentControllerAdvice {
 		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(value = { Exception.class })
+	@ExceptionHandler(value = {Exception.class})
 	public ResponseEntity<Response> handleAllException5XX(Exception ex,
 		WebRequest request) throws JsonProcessingException {
 		
@@ -53,5 +53,5 @@ public class PaymentControllerAdvice {
 		
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
+	
 }

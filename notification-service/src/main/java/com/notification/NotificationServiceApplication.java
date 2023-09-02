@@ -26,7 +26,7 @@ class NotificationServiceHealth {
 	@GetMapping(value = "/health")
 	public Mono<ResponseEntity<Map<String, String>>> healthStatus() {
 		Map<String, String> healthMa = new HashMap<>();
-		healthMa.put("status","Running");
+		healthMa.put("status", "Running");
 		return Mono.just(new ResponseEntity<Map<String, String>>(healthMa, HttpStatus.OK));
 	}
 }

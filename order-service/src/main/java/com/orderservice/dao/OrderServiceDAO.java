@@ -11,12 +11,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderServiceDAO extends JpaRepository<OrderDetails, String> {
+	
 	@Modifying
 	@Query("update OrderDetails o set o.paymentStatus =:toPaymentStatus , o.orderStatusEnum =:toOrderStatus where o.orderId = :orderId and o.paymentStatus =:fromPaymentStatus and o.orderStatusEnum =:fromOrderStatus")
 	Integer updateOrderDetailsByOrderId(
-			@Param("fromPaymentStatus") PaymentStatus fromPaymentStatus,
-			@Param("toPaymentStatus") PaymentStatus toPaymentStatus,
-			@Param("fromOrderStatus") OrderStatusEnum fromOrderStatus,
-			@Param("toOrderStatus") OrderStatusEnum toOrderStatus,
-			@Param("orderId") String orderId);
+		@Param("fromPaymentStatus") PaymentStatus fromPaymentStatus,
+		@Param("toPaymentStatus") PaymentStatus toPaymentStatus,
+		@Param("fromOrderStatus") OrderStatusEnum fromOrderStatus,
+		@Param("toOrderStatus") OrderStatusEnum toOrderStatus,
+		@Param("orderId") String orderId);
 }

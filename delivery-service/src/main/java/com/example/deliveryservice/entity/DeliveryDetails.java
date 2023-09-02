@@ -21,19 +21,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class DeliveryDetails extends AuditModel {
-  
-  @EmbeddedId
-  private DeliveryDetailsPk deliveryDetailsPk;
-  
-  @Column(name = "delivery_status")
-  @Enumerated(EnumType.STRING)
-  private DeliveryStatus deliveryStatus;
-  
-  @Column(name = "delivery_charge_payment_status")
-  @Enumerated(EnumType.STRING)
-  private PaymentStatus paymentStatus;
-  
-  @Column(name = "delivery_charge")
-  private BigDecimal deliveryCharge;
-  
+	
+	@EmbeddedId
+	private DeliveryDetailsPk deliveryDetailsPk;
+	
+	@Column(name = "delivery_status")
+	@Enumerated(EnumType.STRING)
+	private DeliveryStatus deliveryStatus;
+	
+	@Column(name = "delivery_charge_payment_status")
+	@Enumerated(EnumType.STRING)
+	private PaymentStatus paymentStatus;
+	
+	@Column(name = "delivery_charge")
+	private BigDecimal deliveryCharge;
+	
 }

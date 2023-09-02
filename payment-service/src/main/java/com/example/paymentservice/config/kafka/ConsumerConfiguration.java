@@ -1,5 +1,19 @@
 package com.example.paymentservice.config.kafka;
 
+import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.CLIENT_ID_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.MAX_POLL_RECORDS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -10,74 +24,69 @@ import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.retry.support.RetryTemplate;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.apache.kafka.clients.consumer.ConsumerConfig.*;
-
 
 @Configuration
 public class ConsumerConfiguration {
-	private ConsumerProperties consumerProperties;
+	
 	private final ConsumerRetriedMessageRecovery recoveryCallback;
 	private final RetryTemplate kafkaRetryTemplate;
-
+	private ConsumerProperties consumerProperties;
+	
 	public ConsumerConfiguration(ConsumerProperties consumerProperties,
-			ConsumerRetriedMessageRecovery recoveryCallback,
-			RetryTemplate kafkaRetryTemplate) {
+		ConsumerRetriedMessageRecovery recoveryCallback,
+		RetryTemplate kafkaRetryTemplate) {
 		this.consumerProperties = consumerProperties;
 		this.recoveryCallback = recoveryCallback;
 		this.kafkaRetryTemplate = kafkaRetryTemplate;
 	}
-
+	
 	private Map<String, Object> consumerProperties() throws IOException {
 		Map<String, Object> propMapping = new HashMap<>();
 		propMapping.put(BOOTSTRAP_SERVERS_CONFIG,
-				consumerProperties.getBootstrapServers());
+			consumerProperties.getBootstrapServers());
 		propMapping.put(VALUE_DESERIALIZER_CLASS_CONFIG,
-				consumerProperties.getValueDeserializer());
+			consumerProperties.getValueDeserializer());
 		propMapping.put(KEY_DESERIALIZER_CLASS_CONFIG,
-				consumerProperties.getKeyDeserializer());
+			consumerProperties.getKeyDeserializer());
 		propMapping.put(ENABLE_AUTO_COMMIT_CONFIG,
-				consumerProperties.isEnableAutoCommit());
+			consumerProperties.isEnableAutoCommit());
 		propMapping.put(GROUP_ID_CONFIG,
-				consumerProperties.getConsumerGroupId());
+			consumerProperties.getConsumerGroupId());
 		propMapping.put(CLIENT_ID_CONFIG, consumerProperties.getClientId());
 		propMapping.put(AUTO_OFFSET_RESET_CONFIG,
-				consumerProperties.getAutoOffsetResetConfig());
+			consumerProperties.getAutoOffsetResetConfig());
 		propMapping.put(MAX_POLL_RECORDS_CONFIG,
-				consumerProperties.getMaxPollRecordConfig());
+			consumerProperties.getMaxPollRecordConfig());
 		propMapping.put(HEARTBEAT_INTERVAL_MS_CONFIG,
-				consumerProperties.getHeartbeatInterval());
+			consumerProperties.getHeartbeatInterval());
 		propMapping.put(SESSION_TIMEOUT_MS_CONFIG,
-				consumerProperties.getSessionTimeout());
+			consumerProperties.getSessionTimeout());
 		return propMapping;
 	}
-
+	
 	@Bean
 	public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory()
-			throws IOException {
+		throws IOException {
 		ConcurrentKafkaListenerContainerFactory<String, String>
-				containerFactory =
-				new ConcurrentKafkaListenerContainerFactory<>();
+			containerFactory =
+			new ConcurrentKafkaListenerContainerFactory<>();
 		containerFactory.setRecoveryCallback(recoveryCallback);
 		containerFactory.setRetryTemplate(kafkaRetryTemplate);
 		containerFactory.setConcurrency(consumerProperties.getConcurrency());
 		containerFactory.setConsumerFactory(consumerFactory());
 		containerFactory.getContainerProperties()
-				.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
+			.setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 		return containerFactory;
 	}
-
+	
 	@Bean
 	public ConsumerFactory<String, Object> consumerFactory()
-			throws IOException {
-
+		throws IOException {
+		
 		DefaultKafkaConsumerFactory<String, Object> consumerFactory =
-				new DefaultKafkaConsumerFactory<>(
-						consumerProperties());
+			new DefaultKafkaConsumerFactory<>(
+				consumerProperties());
 		return consumerFactory;
 	}
-
+	
 }

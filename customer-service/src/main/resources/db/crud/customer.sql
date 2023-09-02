@@ -4,12 +4,12 @@
 
 create table if not exists customer_profile
 (
-    id      serial,
-    user_id varchar(100) not null unique,
-    f_name  varchar(20),
-    l_name  varchar(40),
+    id                  serial,
+    user_id             varchar(100) not null unique,
+    f_name              varchar(20),
+    l_name              varchar(40),
     user_password       varchar(100),
-    pr_mobnbr           varchar(20) not null unique,
+    pr_mobnbr           varchar(20)  not null unique,
     sec_mobnbr          varchar(20),
     cntry_code          varchar(5),
     house_nbr           varchar(20),

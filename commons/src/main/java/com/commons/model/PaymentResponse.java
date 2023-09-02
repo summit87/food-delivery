@@ -13,11 +13,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PaymentResponse {
+	
 	private String paymentTransactionId;
 	private BigDecimal totalDeductedAmount;
 	private PaymentStatus paymentStatus;
 	private Instant transactionDate;
 	private String orderId;
 	private String restaurantId;
-
+	
 }

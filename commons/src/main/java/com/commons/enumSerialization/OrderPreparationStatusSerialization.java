@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class OrderPreparationStatusSerialization
-		extends JsonDeserializer<OrderPreparationStatus> {
-
+	extends JsonDeserializer<OrderPreparationStatus> {
+	
 	@Override
 	public OrderPreparationStatus deserialize(JsonParser jsonParser,
-			DeserializationContext deserializationContext)
-			throws IOException {
-
+		DeserializationContext deserializationContext)
+		throws IOException {
+		
 		JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 		OrderPreparationStatus type = null;
 		try {
@@ -32,7 +32,7 @@ public class OrderPreparationStatusSerialization
 			type = null;
 			log.error("", e);
 			throw new RuntimeException(
-					"Unable to find order status event type");
+				"Unable to find order status event type");
 		}
 	}
 }

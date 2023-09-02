@@ -11,8 +11,8 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ItemOrderResponse {
-
+	
 	private String orderId;
 	private OrderStatusEnum orderStatus;
-
+	
 }

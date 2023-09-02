@@ -13,15 +13,16 @@ import org.springframework.retry.RetryContext;
 @Qualifier("recoveryCallback")
 @Slf4j
 public class ConsumerRetriedMessageRecovery implements RecoveryCallback<Void> {
+	
 	@Override
 	public Void recover(RetryContext context) throws Exception {
 		log.error(
-				"Recovery is called after RetryPolicy limit {}",
-				context.getRetryCount());
+			"Recovery is called after RetryPolicy limit {}",
+			context.getRetryCount());
 		Acknowledgment ack =
-				(Acknowledgment) context.getAttribute(CONTEXT_ACKNOWLEDGMENT);
+			(Acknowledgment) context.getAttribute(CONTEXT_ACKNOWLEDGMENT);
 		ack.acknowledge();
-		log.error("Acknowledgement is done for payload {}",context);
+		log.error("Acknowledgement is done for payload {}", context);
 		return null;
 	}
 }

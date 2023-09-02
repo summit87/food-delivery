@@ -1,19 +1,19 @@
 package com.example.restaurantservice.config.kafka;
 
+import static com.example.restaurantservice.utils.Constants.CONSUMER_PROP_PREFIX_NAME;
+
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
-
-import static com.example.restaurantservice.utils.Constants.CONSUMER_PROP_PREFIX_NAME;
 
 @Configuration
 @ConfigurationProperties(prefix = CONSUMER_PROP_PREFIX_NAME)
 @Setter
 @Getter
 public class ConsumerProperties {
+	
 	private List<String> bootstrapServers;
 	private String topic;
 	private boolean enableAutoCommit;

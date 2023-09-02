@@ -14,8 +14,9 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 public class PaymentStatusResponseFromOrderService {
+	
 	private String orderId;
 	private String txnId;
-
+	
 	private OrderStatusEnum paymentStatus;
 }

@@ -5,5 +5,5 @@ import com.example.deliveryservice.entity.DeliveryOrderMapping;
 public interface DeliveryOrderMappingService {
 	
 	DeliveryOrderMapping save(DeliveryOrderMapping deliveryOrderMapping);
-
+	
 }

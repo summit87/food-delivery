@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RestaurantOrderDAO
-		extends JpaRepository<RestaurantOrder, String> {
-
+	extends JpaRepository<RestaurantOrder, String> {
+	
 	@Modifying
 	@Query("update RestaurantOrder ro set ro.restaurantOrderStatus =:toRestaurantStatus where ro.restaurantId =:restaurantId and ro.orderId =:orderId and ro.restaurantOrderStatus =:fromRestaurantStatus")
 	Integer updateRestaurantOrderByOrderIdAndRestaurantId(
-			@Param("toRestaurantStatus") RestaurantOrderStatus toRestaurantStatus,
-			@Param("orderId") String orderId,
-			@Param("restaurantId") String restaurantId,
-			@Param("fromRestaurantStatus") RestaurantOrderStatus fromRestaurantStatus);
+		@Param("toRestaurantStatus") RestaurantOrderStatus toRestaurantStatus,
+		@Param("orderId") String orderId,
+		@Param("restaurantId") String restaurantId,
+		@Param("fromRestaurantStatus") RestaurantOrderStatus fromRestaurantStatus);
 }

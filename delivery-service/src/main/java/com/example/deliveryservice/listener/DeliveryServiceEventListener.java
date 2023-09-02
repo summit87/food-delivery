@@ -14,17 +14,17 @@ import org.springframework.kafka.support.Acknowledgment;
 @Configuration
 @Slf4j
 public class DeliveryServiceEventListener {
-
-  private final ConsumerListenerAdapter consumerListenerAdapter;
-  
-  public DeliveryServiceEventListener(ConsumerListenerAdapter consumerListenerAdapter) {
-    this.consumerListenerAdapter = consumerListenerAdapter;
-  }
-  
-  @KafkaListener(topics = "#{restaurantEventProperties.deliveryInit}", containerFactory = "kafkaListenerContainerFactory")
-  public void initiateDeliveryService(ConsumerRecord<String, String> record,
-      Acknowledgment acknowledgment) {
-    consumerListenerAdapter.consumeAndProcess(record, acknowledgment);
-  }
-
+	
+	private final ConsumerListenerAdapter consumerListenerAdapter;
+	
+	public DeliveryServiceEventListener(ConsumerListenerAdapter consumerListenerAdapter) {
+		this.consumerListenerAdapter = consumerListenerAdapter;
+	}
+	
+	@KafkaListener(topics = "#{restaurantEventProperties.deliveryInit}", containerFactory = "kafkaListenerContainerFactory")
+	public void initiateDeliveryService(ConsumerRecord<String, String> record,
+		Acknowledgment acknowledgment) {
+		consumerListenerAdapter.consumeAndProcess(record, acknowledgment);
+	}
+	
 }

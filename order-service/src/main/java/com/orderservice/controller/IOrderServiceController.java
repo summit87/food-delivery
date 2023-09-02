@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 
 public interface IOrderServiceController {
-
+	
 	@PostMapping(path = "/createOrder")
 	OrderStatus createOrder(@RequestBody OrderCreateRequest itemOrderRequests,
-			@RequestHeader HttpHeaders headers);
-
+		@RequestHeader HttpHeaders headers);
+	
 	@PostMapping(path = "/paymentStatus")
 	Response<PaymentStatusResponse> updatePaymentStatus(
 		@RequestBody PaymentStatusRequest paymentStatusRequest, @RequestHeader HttpHeaders headers)
-			throws JsonProcessingException;
-
+		throws JsonProcessingException;
+	
 	@GetMapping(path = "status/{orderId}")
 	Response<OrderMetaInfo> getOrderStatusByOrderId(@PathVariable("orderId") String orderId)
-			throws JsonProcessingException;
-
-
+		throws JsonProcessingException;
+	
+	
 }

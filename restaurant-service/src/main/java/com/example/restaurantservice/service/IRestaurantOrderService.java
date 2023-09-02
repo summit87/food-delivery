@@ -8,9 +8,11 @@ import com.example.restaurantservice.entity.RestaurantOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface IRestaurantOrderService {
+	
 	Response<RestaurantOrder> createOrderForRestaurant(
-			RestaurantOrderDetails restaurantOrderDetails)
-			throws JsonProcessingException;
-
-	Response<UpdateRestaurantOrderResponse> updateRestaurantOrder(String orderId, UpdateRestaurantOrderRequest order);
+		RestaurantOrderDetails restaurantOrderDetails)
+		throws JsonProcessingException;
+	
+	Response<UpdateRestaurantOrderResponse> updateRestaurantOrder(String orderId,
+		UpdateRestaurantOrderRequest order);
 }

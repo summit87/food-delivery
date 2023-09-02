@@ -20,61 +20,62 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestController
 @Slf4j
 public class CustomerServiceRestControllerAdvice extends
-        ResponseEntityExceptionHandler {
-
-    @ExceptionHandler(value = {CustomerNotFoundException.class})
-
-    public ResponseEntity<Response<ApiErrorResponse>> handleAllException(Exception ex,
-                                                       WebRequest request) throws JsonProcessingException {
-
-        ApiErrorResponse apiResponse = GenericBuilder
-                .of(ApiErrorResponse::new)
-                .with(ApiErrorResponse::setErrorType, ex.getClass().getName())
-                .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
-                .with(ApiErrorResponse::setErrorCode, "OS.GET.0001")
-                .build();
-        Response<ApiErrorResponse> response =
-                new Response.ResponseBuilder<ApiErrorResponse>()
-                        .responseBody(apiResponse)
-                        .build();
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-    
-    @ExceptionHandler(value = {Exception.class})
-    public ResponseEntity<Response<ApiErrorResponse>> handleAllException5XX(Exception ex,
-                                                          WebRequest request) throws JsonProcessingException {
-
-        ApiErrorResponse apiResponse = GenericBuilder
-                .of(ApiErrorResponse::new)
-                .with(ApiErrorResponse::setErrorType, ex.getClass().getName())
-                .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
-                .with(ApiErrorResponse::setErrorCode, "OS.GET.0002")
-                .build();
-        Response<ApiErrorResponse> response =
-                new ResponseBuilder<ApiErrorResponse>()
-                        .responseBody(apiResponse)
-                        .build();
-        log.error("", ex);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
-    @ExceptionHandler(value = {CustomerDuplicateRecord.class})
-    public ResponseEntity<Response<ApiErrorResponse>> handleAllExceptionDataIntegrityViolationException(Exception ex,
-        WebRequest request) throws JsonProcessingException {
-        
-        ApiErrorResponse apiResponse = GenericBuilder
-            .of(ApiErrorResponse::new)
-            .with(ApiErrorResponse::setErrorType, ex.getClass().getName())
-            .with(ApiErrorResponse::setErrorMessage, ex.getMessage())
-            .with(ApiErrorResponse::setErrorCode, "CS.PROFILE.0003")
-            .build();
-        Response<ApiErrorResponse> response =
-            new Response.ResponseBuilder<ApiErrorResponse>()
-                .responseBody(apiResponse)
-                .build();
-        log.error("", ex);
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
+	ResponseEntityExceptionHandler {
+	
+	@ExceptionHandler(value = {CustomerNotFoundException.class})
+	
+	public ResponseEntity<Response<ApiErrorResponse>> handleAllException(Exception ex,
+		WebRequest request) throws JsonProcessingException {
+		
+		ApiErrorResponse apiResponse = GenericBuilder
+			.of(ApiErrorResponse::new)
+			.with(ApiErrorResponse::setErrorType, ex.getClass().getName())
+			.with(ApiErrorResponse::setErrorMessage, ex.getMessage())
+			.with(ApiErrorResponse::setErrorCode, "OS.GET.0001")
+			.build();
+		Response<ApiErrorResponse> response =
+			new Response.ResponseBuilder<ApiErrorResponse>()
+				.responseBody(apiResponse)
+				.build();
+		
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(value = {Exception.class})
+	public ResponseEntity<Response<ApiErrorResponse>> handleAllException5XX(Exception ex,
+		WebRequest request) throws JsonProcessingException {
+		
+		ApiErrorResponse apiResponse = GenericBuilder
+			.of(ApiErrorResponse::new)
+			.with(ApiErrorResponse::setErrorType, ex.getClass().getName())
+			.with(ApiErrorResponse::setErrorMessage, ex.getMessage())
+			.with(ApiErrorResponse::setErrorCode, "OS.GET.0002")
+			.build();
+		Response<ApiErrorResponse> response =
+			new ResponseBuilder<ApiErrorResponse>()
+				.responseBody(apiResponse)
+				.build();
+		log.error("", ex);
+		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(value = {CustomerDuplicateRecord.class})
+	public ResponseEntity<Response<ApiErrorResponse>> handleAllExceptionDataIntegrityViolationException(
+		Exception ex,
+		WebRequest request) throws JsonProcessingException {
+		
+		ApiErrorResponse apiResponse = GenericBuilder
+			.of(ApiErrorResponse::new)
+			.with(ApiErrorResponse::setErrorType, ex.getClass().getName())
+			.with(ApiErrorResponse::setErrorMessage, ex.getMessage())
+			.with(ApiErrorResponse::setErrorCode, "CS.PROFILE.0003")
+			.build();
+		Response<ApiErrorResponse> response =
+			new Response.ResponseBuilder<ApiErrorResponse>()
+				.responseBody(apiResponse)
+				.build();
+		log.error("", ex);
+		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
 }

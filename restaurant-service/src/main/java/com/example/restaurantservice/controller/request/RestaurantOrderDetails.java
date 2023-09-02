@@ -11,10 +11,10 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestaurantOrderDetails {
-
+	
 	private String orderId;
 	private String restaurantId;
 	private PaymentStatus paymentStatus;
 	private String userId;
-
+	
 }

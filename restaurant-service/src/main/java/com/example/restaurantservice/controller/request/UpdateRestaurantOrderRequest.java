@@ -11,6 +11,7 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateRestaurantOrderRequest {
+	
 	private RestaurantOrderStatus orderStatus;
 	private String restaurantId;
 }

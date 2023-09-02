@@ -17,7 +17,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class CustomerDetails {
-    CustomerProfile customerProfile;
-    UserSecrets userSecrets;
-
+	
+	CustomerProfile customerProfile;
+	UserSecrets userSecrets;
+	
 }

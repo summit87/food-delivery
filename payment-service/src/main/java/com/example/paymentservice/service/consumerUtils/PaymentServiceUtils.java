@@ -14,42 +14,42 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Slf4j
 public class PaymentServiceUtils {
-
+	
 	private final PaymentServiceImpl paymentServiceImpl;
 	private final ObjectMapper objectMapper;
 	private final ProducerServiceUtils producerServiceUtils;
-
+	
 	public PaymentServiceUtils(PaymentServiceImpl paymentServiceImpl,
-			ObjectMapper objectMapper,
-			ProducerServiceUtils producerServiceUtils) {
+		ObjectMapper objectMapper,
+		ProducerServiceUtils producerServiceUtils) {
 		this.paymentServiceImpl = paymentServiceImpl;
 		this.objectMapper = objectMapper;
 		this.producerServiceUtils = producerServiceUtils;
 	}
-
+	
 	@Transactional(rollbackFor = Exception.class)
 	public void doOrderPayment(ConsumerRecord<String, String> consumerRecord,
-			Acknowledgment acknowledgment) {
+		Acknowledgment acknowledgment) {
 		try {
-
+			
 			PaymentRequest paymentRequest =
-					objectMapper.readValue(consumerRecord.value(),
-							PaymentRequest.class);
+				objectMapper.readValue(consumerRecord.value(),
+					PaymentRequest.class);
 			log.info("Payment started for order id {} ",
-					paymentRequest.getOrderId());
+				paymentRequest.getOrderId());
 			PaymentStatusResponse paymentStatusResponse =
-					paymentServiceImpl.savePaymentDetails(paymentRequest);
+				paymentServiceImpl.savePaymentDetails(paymentRequest);
 			acknowledgment.acknowledge();
 			log.info("Payment completed for order id {} and transaction id {}",
-					paymentStatusResponse.getOrderId(),
-					paymentStatusResponse.getTransactionId());
+				paymentStatusResponse.getOrderId(),
+				paymentStatusResponse.getTransactionId());
 			/**
 			 * Publish the event to restaurant service
 			 * Once restaurant service will receive the event ,
 			 * Publish the event to respective restaurant id
 			 */
 			producerServiceUtils.publishEvent(paymentStatusResponse);
-
+			
 		} catch (JsonProcessingException e) {
 			acknowledgment.acknowledge();
 			log.error("", e);
@@ -57,6 +57,6 @@ public class PaymentServiceUtils {
 			log.error("Error while making payment ", ex);
 			log.error("", ex);
 		}
-
+		
 	}
 }

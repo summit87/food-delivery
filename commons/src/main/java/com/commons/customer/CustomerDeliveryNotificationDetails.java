@@ -19,5 +19,5 @@ public class CustomerDeliveryNotificationDetails {
 	List<DeliveryBoyDetails> deliveryBoyDetails;
 	CustomerDetails customerDetails;
 	
-
+	
 }

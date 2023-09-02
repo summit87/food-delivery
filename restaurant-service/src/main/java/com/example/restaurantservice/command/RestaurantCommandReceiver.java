@@ -20,67 +20,67 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class RestaurantCommandReceiver {
-
-  private final RestaurantCommandFactory restaurantCommandFactory;
-  private final ObjectMapper objectMapper;
-
-  private final RestaurantProducerUtils restaurantProducerUtils;
-
-  public RestaurantCommandReceiver(
-      RestaurantCommandFactory restaurantCommandFactory,
-      ObjectMapper objectMapper,
-      RestaurantProducerUtils restaurantProducerUtils) {
-    this.restaurantCommandFactory = restaurantCommandFactory;
-    this.objectMapper = objectMapper;
-    this.restaurantProducerUtils = restaurantProducerUtils;
-  }
-
-  @Transactional(rollbackOn = Exception.class)
-  public void receiveCommand(
-      ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment)
-      throws JsonProcessingException {
-
-    Headers headers = consumerRecord.headers();
-    Map<String, String> commandNameMap = getCommandMapping(headers);
-    RestaurantServiceCommandName commandName =
-        RestaurantServiceCommandName.valueOf(commandNameMap.get(EVENT_KEY_NAME));
-
-    RestaurantOrderService restaurantOrderService =
-        restaurantCommandFactory.getRestaurantCommandService(commandName);
-    RestaurantEventDetails restaurantEventDetails =
-        objectMapper.readValue(consumerRecord.value(), RestaurantEventDetails.class);
-    log.info(
-        "Event {} received for the order id {} in restaurant id {} from partition {} , offset {}",
-        commandName.name(),
-        restaurantEventDetails.getOrderId(),
-        restaurantEventDetails.getRestaurantId(),
-        consumerRecord.partition(),
-        consumerRecord.offset());
-    RestaurantOrder order =
-        restaurantOrderService.acceptEventAndProcessMessage(restaurantEventDetails);
-	  
-	  /**
-	   * 1. Send ack for acceptance by restaurant to order service
-	   * 3.
-	   */
-	  
-	  log.info(
-        "Transaction committed for the order id {} ,restaurant id {} in partition {} , offset {}",
-        order.getOrderId(),
-        order.getRestaurantId(),
-        consumerRecord.partition(),
-        consumerRecord.offset());
-    /** Publish the message to delivery service */
-    log.info(
-        "Start publishing the restaurant order to delivery service , restaurant id {} , order id {}",
-        order.getRestaurantId(),
-        order.getOrderId());
-    restaurantProducerUtils.publish(order);
-	  acknowledgment.acknowledge();
-  }
-
+	
+	private final RestaurantCommandFactory restaurantCommandFactory;
+	private final ObjectMapper objectMapper;
+	
+	private final RestaurantProducerUtils restaurantProducerUtils;
+	
+	public RestaurantCommandReceiver(
+		RestaurantCommandFactory restaurantCommandFactory,
+		ObjectMapper objectMapper,
+		RestaurantProducerUtils restaurantProducerUtils) {
+		this.restaurantCommandFactory = restaurantCommandFactory;
+		this.objectMapper = objectMapper;
+		this.restaurantProducerUtils = restaurantProducerUtils;
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void receiveCommand(
+		ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment)
+		throws JsonProcessingException {
+		
+		Headers headers = consumerRecord.headers();
+		Map<String, String> commandNameMap = getCommandMapping(headers);
+		RestaurantServiceCommandName commandName =
+			RestaurantServiceCommandName.valueOf(commandNameMap.get(EVENT_KEY_NAME));
+		
+		RestaurantOrderService restaurantOrderService =
+			restaurantCommandFactory.getRestaurantCommandService(commandName);
+		RestaurantEventDetails restaurantEventDetails =
+			objectMapper.readValue(consumerRecord.value(), RestaurantEventDetails.class);
+		log.info(
+			"Event {} received for the order id {} in restaurant id {} from partition {} , offset {}",
+			commandName.name(),
+			restaurantEventDetails.getOrderId(),
+			restaurantEventDetails.getRestaurantId(),
+			consumerRecord.partition(),
+			consumerRecord.offset());
+		RestaurantOrder order =
+			restaurantOrderService.acceptEventAndProcessMessage(restaurantEventDetails);
+		
+		/**
+		 * 1. Send ack for acceptance by restaurant to order service
+		 * 3.
+		 */
+		
+		log.info(
+			"Transaction committed for the order id {} ,restaurant id {} in partition {} , offset {}",
+			order.getOrderId(),
+			order.getRestaurantId(),
+			consumerRecord.partition(),
+			consumerRecord.offset());
+		/** Publish the message to delivery service */
+		log.info(
+			"Start publishing the restaurant order to delivery service , restaurant id {} , order id {}",
+			order.getRestaurantId(),
+			order.getOrderId());
+		restaurantProducerUtils.publish(order);
+		acknowledgment.acknowledge();
+	}
+	
 	private Map<String, String> getCommandMapping(
-			Headers headers) {
+		Headers headers) {
 		Map<String, String> map = new HashMap<>();
 		headers.iterator().forEachRemaining(header -> {
 			map.put(header.key(), new String(header.value()));

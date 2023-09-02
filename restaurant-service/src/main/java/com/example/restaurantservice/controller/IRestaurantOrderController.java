@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface IRestaurantOrderController {
-
+	
 	@PostMapping(value = "/createRestaurantOrder")
 	Response createOrderForRestaurant(
-			@RequestBody RestaurantOrderDetails restaurantOrderDetails)
-			throws JsonProcessingException;
-
+		@RequestBody RestaurantOrderDetails restaurantOrderDetails)
+		throws JsonProcessingException;
+	
 	@PostMapping(value = "/updateOrder/{orderId}")
-	Response updateRestaurantOrder(@PathVariable("orderId") String orderId,@RequestBody
+	Response updateRestaurantOrder(@PathVariable("orderId") String orderId, @RequestBody
 	UpdateRestaurantOrderRequest order);
-
+	
 }

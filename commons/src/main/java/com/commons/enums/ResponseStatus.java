@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ResponseStatus {
+	
 	private Status status;
 	private String statusCode;
 }

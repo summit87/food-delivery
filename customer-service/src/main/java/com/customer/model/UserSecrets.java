@@ -16,9 +16,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class UserSecrets {
-
-    String userId;
-    String primaryContactNumber;
-    String secondaryContactNumber;
-    String password;
+	
+	String userId;
+	String primaryContactNumber;
+	String secondaryContactNumber;
+	String password;
 }

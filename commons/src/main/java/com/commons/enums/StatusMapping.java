@@ -1,9 +1,11 @@
 package com.commons.enums;
 
+import static com.commons.enums.OrderStatusEnum.ORDER_CONFIRMED;
+import static com.commons.enums.OrderStatusEnum.ORDER_FAILED;
+import static com.commons.enums.OrderStatusEnum.ORDER_IN_PROGRESS;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import static com.commons.enums.OrderStatusEnum.*;
 
 @Getter
 @AllArgsConstructor

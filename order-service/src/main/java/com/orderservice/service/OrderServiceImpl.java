@@ -32,20 +32,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
 public class OrderServiceImpl implements IOrderService {
-
+	
 	private OrderServiceDAO orderServiceDAO;
 	private MessageSender messageSender;
-
+	
 	private IItemService itemServiceImpl;
-
+	
 	private ObjectMapper objectMapper;
 	
 	private PaymentServiceClient paymentServiceClient;
-
+	
 	public OrderServiceImpl(OrderServiceDAO orderServiceDAO,
-			MessageSender messageSender, IItemService itemServiceImpl,
+		MessageSender messageSender, IItemService itemServiceImpl,
 		ObjectMapper objectMapper, PaymentServiceClient paymentServiceClient) {
-
+		
 		this.orderServiceDAO = orderServiceDAO;
 		this.messageSender = messageSender;
 		this.itemServiceImpl = itemServiceImpl;
@@ -56,63 +56,63 @@ public class OrderServiceImpl implements IOrderService {
 	
 	@Override
 	public OrderStatus receivedPaymentStatus(
-			ReceivedPaymentStatus receivedPaymentStatus) {
+		ReceivedPaymentStatus receivedPaymentStatus) {
 		return null;
 	}
-
+	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public OrderStatus createOrder(OrderCreateRequest orderCreateRequest,
-			HttpHeaders headers) {
-
+		HttpHeaders headers) {
+		
 		String orderId = createOrderId();
 		String restaurantId = createRestaurantId();
 		OrderDetails orderDetailsBuilder =
-				GenericBuilder.of(OrderDetails::new)
-						.with(OrderDetails::setOrderId, orderId)
-						.with(OrderDetails::setOrderStatusEnum,
-								OrderStatusEnum.ORDER_IN_PROGRESS)
-						.with(OrderDetails::setPaymentStatus,
-								PaymentStatus.INITIATED)
-						.with(OrderDetails::setRestaurantId, restaurantId)
-						.with(OrderDetails::setUserId,
-								headers.getFirst("userId")).build();
-
+			GenericBuilder.of(OrderDetails::new)
+				.with(OrderDetails::setOrderId, orderId)
+				.with(OrderDetails::setOrderStatusEnum,
+					OrderStatusEnum.ORDER_IN_PROGRESS)
+				.with(OrderDetails::setPaymentStatus,
+					PaymentStatus.INITIATED)
+				.with(OrderDetails::setRestaurantId, restaurantId)
+				.with(OrderDetails::setUserId,
+					headers.getFirst("userId")).build();
+		
 		Set<OrderItemDetails> orderItemDetails
-				= orderCreateRequest.getItemOrderRequests().stream()
-				.map(availableItem ->
-						GenericBuilder.of(OrderItemDetails::new)
-								.with(OrderItemDetails::setItemId,
-										availableItem.getItemId())
-								.with(OrderItemDetails::setOrderDetails,
-										orderDetailsBuilder).build())
-				.collect(Collectors.toSet());
-
+			= orderCreateRequest.getItemOrderRequests().stream()
+			.map(availableItem ->
+				GenericBuilder.of(OrderItemDetails::new)
+					.with(OrderItemDetails::setItemId,
+						availableItem.getItemId())
+					.with(OrderItemDetails::setOrderDetails,
+						orderDetailsBuilder).build())
+			.collect(Collectors.toSet());
+		
 		BigDecimal totalAmount = itemServiceImpl.getAvailableItemsById(
-						orderCreateRequest.getItemOrderRequests().stream()
-								.map(items -> items.getItemId())
-								.collect(
-										Collectors.toList())).stream()
-				.map(item -> item.getItemPrice())
-				.reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
-
+				orderCreateRequest.getItemOrderRequests().stream()
+					.map(items -> items.getItemId())
+					.collect(
+						Collectors.toList())).stream()
+			.map(item -> item.getItemPrice())
+			.reduce(BigDecimal.ZERO, (a, b) -> a.add(b));
+		
 		orderDetailsBuilder.setOrderItemDetails(orderItemDetails);
 		orderDetailsBuilder.setTotalAmountNeedToPay(totalAmount);
 		try {
 			log.info("Started order creation for user id {} and order id {}",
-					headers.getFirst("userId"), orderId);
-
+				headers.getFirst("userId"), orderId);
+			
 			OrderDetails savedResult =
-					orderServiceDAO.save(orderDetailsBuilder);
-
+				orderServiceDAO.save(orderDetailsBuilder);
+			
 			PaymentRequest paymentRequest =
-					GenericBuilder.of(PaymentRequest::new)
-							.with(PaymentRequest::setOrderId, orderId)
-							.with(PaymentRequest::setUserId,
-									headers.getFirst("userId"))
-							.with(PaymentRequest::setRestaurantId, restaurantId)
-							.with(PaymentRequest::setTotalAmountNeedToPay,
-									totalAmount).build();
+				GenericBuilder.of(PaymentRequest::new)
+					.with(PaymentRequest::setOrderId, orderId)
+					.with(PaymentRequest::setUserId,
+						headers.getFirst("userId"))
+					.with(PaymentRequest::setRestaurantId, restaurantId)
+					.with(PaymentRequest::setTotalAmountNeedToPay,
+						totalAmount).build();
 			log.info("Started processing payment request for order id {} ",
 				savedResult.getOrderId());
 			PaymentResponse paymentResponse
@@ -132,89 +132,89 @@ public class OrderServiceImpl implements IOrderService {
 				.with(OrderStatus::setInstant, Instant.now())
 				.with(OrderStatus::setPaidAmount, totalAmount)
 				.with(OrderStatus::setPaymentId, paymentResponse.getPaymentTransactionId())
-							.build();
-
+				.build();
+			
 		} catch (Exception ex) {
 			log.error("Failed to execute order for given order id {}", orderId,
-					ex);
+				ex);
 			throw new RuntimeException(ex.getMessage());
 		}
 	}
-
+	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public PaymentStatusResponse updatePaymentStatus(
-			PaymentStatusRequest paymentStatusRequest, HttpHeaders headers) {
-
+		PaymentStatusRequest paymentStatusRequest, HttpHeaders headers) {
+		
 		OrderStatusEnum toOrderStatus = StatusMapping.valueOf(
-						paymentStatusRequest.getPaymentStatus().name())
-				.getOrderStatusEnum();
-
+				paymentStatusRequest.getPaymentStatus().name())
+			.getOrderStatusEnum();
+		
 		Optional<OrderDetails> optionalOrderDetails = orderServiceDAO.findById(
-				paymentStatusRequest.getOrderId());
+			paymentStatusRequest.getOrderId());
 		if (optionalOrderDetails.isEmpty()) {
-
+			
 			log.error("Received payment status for order id {} not exist",
-					paymentStatusRequest.getOrderId());
+				paymentStatusRequest.getOrderId());
 			throw new RuntimeException("Order not exist");
 		}
-
+		
 		Integer rowUpdated = orderServiceDAO.updateOrderDetailsByOrderId(
-				optionalOrderDetails.get().getPaymentStatus(),
-				paymentStatusRequest.getPaymentStatus(),
-				optionalOrderDetails.get().getOrderStatusEnum(),
-				toOrderStatus,
-				paymentStatusRequest.getOrderId());
-
+			optionalOrderDetails.get().getPaymentStatus(),
+			paymentStatusRequest.getPaymentStatus(),
+			optionalOrderDetails.get().getOrderStatusEnum(),
+			toOrderStatus,
+			paymentStatusRequest.getOrderId());
+		
 		log.info(
-				"Payment status updated for for order id {} and payment status {}",
-				paymentStatusRequest.getOrderId(), toOrderStatus.name());
+			"Payment status updated for for order id {} and payment status {}",
+			paymentStatusRequest.getOrderId(), toOrderStatus.name());
 		
 		return GenericBuilder.of(PaymentStatusResponse::new)
-						.with(PaymentStatusResponse::setPaymentStatus,
-								toOrderStatus)
-						.with(PaymentStatusResponse::setOrderId,
-								paymentStatusRequest.getOrderId())
-						.with(PaymentStatusResponse::setTxnId,
-								paymentStatusRequest.getTxnId())
-						.build();
+			.with(PaymentStatusResponse::setPaymentStatus,
+				toOrderStatus)
+			.with(PaymentStatusResponse::setOrderId,
+				paymentStatusRequest.getOrderId())
+			.with(PaymentStatusResponse::setTxnId,
+				paymentStatusRequest.getTxnId())
+			.build();
 	}
-
+	
 	@Override
 	public OrderMetaInfo findOrderStatusByOrderId(String orderId) {
 		Optional<OrderDetails> orderDetails = orderServiceDAO.findById(orderId);
 		if (orderDetails.isEmpty()) {
 			throw new OrderNotFoundException(
-					String.format("Order not found for given order id %s",
-							orderId));
+				String.format("Order not found for given order id %s",
+					orderId));
 		}
-
+		
 		OrderDetails orderDetails1 = orderDetails.get();
 		
 		return GenericBuilder.of(OrderMetaInfo::new)
-				.with(OrderMetaInfo::setOrderStatusEnum,
-						orderDetails1.getOrderStatusEnum())
-				.with(OrderMetaInfo::setPaymentStatus,
-						orderDetails1.getPaymentStatus())
-				.with(OrderMetaInfo::setItemMetaInfos,
-						itemServiceImpl.getItemMetaInfos(
-								orderDetails1.getOrderItemDetails()
-										.stream()
-									.map(OrderItemDetails::getItemId)
-										.collect(Collectors.toList())))
-				.build();
+			.with(OrderMetaInfo::setOrderStatusEnum,
+				orderDetails1.getOrderStatusEnum())
+			.with(OrderMetaInfo::setPaymentStatus,
+				orderDetails1.getPaymentStatus())
+			.with(OrderMetaInfo::setItemMetaInfos,
+				itemServiceImpl.getItemMetaInfos(
+					orderDetails1.getOrderItemDetails()
+						.stream()
+						.map(OrderItemDetails::getItemId)
+						.collect(Collectors.toList())))
+			.build();
 	}
-
+	
 	private String createOrderId() {
 		long number = (long) Math.floor(
-				Math.random() * 9_000_000_000L) + 1_000_000_000L;
+			Math.random() * 9_000_000_000L) + 1_000_000_000L;
 		return "O" + number;
 	}
-
+	
 	private String createRestaurantId() {
 		long number = (long) Math.floor(
-				Math.random() * 9_000_000_000L) + 1_000_000_000L;
+			Math.random() * 9_000_000_000L) + 1_000_000_000L;
 		return "O" + number;
 	}
-
+	
 }

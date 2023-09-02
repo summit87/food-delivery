@@ -10,17 +10,17 @@ import org.springframework.kafka.support.Acknowledgment;
 @Configuration
 @Slf4j
 public class OrderConsumerListener {
-
+	
 	private PaymentServiceUtils paymentServiceUtils;
-
+	
 	public OrderConsumerListener(PaymentServiceUtils paymentServiceUtils) {
 		this.paymentServiceUtils = paymentServiceUtils;
 	}
-
+	
 	@KafkaListener(topics = "#{consumerProperties.topic}", containerFactory = "kafkaListenerContainerFactory")
 	public void orderConsumerListener(
-			ConsumerRecord<String, String> consumerRecord,
-			Acknowledgment acknowledgment) {
+		ConsumerRecord<String, String> consumerRecord,
+		Acknowledgment acknowledgment) {
 		paymentServiceUtils.doOrderPayment(consumerRecord, acknowledgment);
 	}
 }

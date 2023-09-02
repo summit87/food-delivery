@@ -20,60 +20,60 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class OrderServiceClient {
-
+	
 	private ClientProperties clientProperties;
-
+	
 	private RestTemplate restTemplate;
 	
 	private RetryTemplate retryTemplate;
-
+	
 	private ObjectMapper objectMapper;
-
+	
 	public OrderServiceClient(ClientProperties clientProperties,
 		RestTemplate restTemplate, RetryTemplate retryTemplate,
-			ObjectMapper objectMapper) {
+		ObjectMapper objectMapper) {
 		this.clientProperties = clientProperties;
 		this.restTemplate = restTemplate;
 		this.retryTemplate = retryTemplate;
 		this.objectMapper = objectMapper;
 	}
-
+	
 	public PaymentStatusResponseFromOrderService postPaymentStatusToOrderService(
-			PaymentStatusResponse paymentStatusResponse)
-			throws JsonProcessingException {
-
+		PaymentStatusResponse paymentStatusResponse)
+		throws JsonProcessingException {
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		PaymentStatusRequestToOrderService requestToOrderService
-				= GenericBuilder.of(PaymentStatusRequestToOrderService::new)
-				.with(PaymentStatusRequestToOrderService::setPaymentStatus,
-						paymentStatusResponse.getPaymentStatus())
-				.with(PaymentStatusRequestToOrderService::setOrderId,
-						paymentStatusResponse.getOrderId())
-				.with(PaymentStatusRequestToOrderService::setTxnId,
-						paymentStatusResponse.getTransactionId())
-				.build();
+			= GenericBuilder.of(PaymentStatusRequestToOrderService::new)
+			.with(PaymentStatusRequestToOrderService::setPaymentStatus,
+				paymentStatusResponse.getPaymentStatus())
+			.with(PaymentStatusRequestToOrderService::setOrderId,
+				paymentStatusResponse.getOrderId())
+			.with(PaymentStatusRequestToOrderService::setTxnId,
+				paymentStatusResponse.getTransactionId())
+			.build();
 		HttpEntity<PaymentStatusRequestToOrderService> entity =
-				new HttpEntity<>(requestToOrderService, headers);
+			new HttpEntity<>(requestToOrderService, headers);
 		String url = String.format("%s/%s", clientProperties.getBaseUrl(),
-				clientProperties.getPostPaymentStatusPath());
+			clientProperties.getPostPaymentStatusPath());
 		ResponseEntity<Response<PaymentStatusResponseFromOrderService>>
-				execute =
+			execute =
 			retryTemplate.execute(
-						(context) -> {
-							try {
-								ParameterizedTypeReference<Response<PaymentStatusResponseFromOrderService>>
-										parameterizedTypeReference =
-										new ParameterizedTypeReference<Response<PaymentStatusResponseFromOrderService>>() {
-										};
-								
-								return restTemplate.exchange(url, HttpMethod.POST, entity,
-									parameterizedTypeReference);
-							} catch (Exception ex) {
-								throw new RuntimeException(ex);
-							}
-						});
+				(context) -> {
+					try {
+						ParameterizedTypeReference<Response<PaymentStatusResponseFromOrderService>>
+							parameterizedTypeReference =
+							new ParameterizedTypeReference<Response<PaymentStatusResponseFromOrderService>>() {
+							};
+						
+						return restTemplate.exchange(url, HttpMethod.POST, entity,
+							parameterizedTypeReference);
+					} catch (Exception ex) {
+						throw new RuntimeException(ex);
+					}
+				});
 		PaymentStatusResponseFromOrderService orderPaymentStatus = null;
 		if (execute.getStatusCode().is2xxSuccessful()) {
 			return execute.getBody().getResponseBody();

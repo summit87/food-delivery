@@ -8,5 +8,5 @@ public class OrderDetails {
 	String orderId;
 	OrderStatusEnum orderStatusEnum;
 	PaymentStatus paymentStatus;
-
+	
 }

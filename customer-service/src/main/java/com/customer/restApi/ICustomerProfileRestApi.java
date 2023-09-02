@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 
-
 public interface ICustomerProfileRestApi {
-    
-    @PostMapping(path = CREATE_CUSTOMER_PROFILE)
-    void createUserProfile(@RequestBody CustomerDetails customerDetails, @RequestHeader HttpHeaders headers) throws Exception;
-    
-    @GetMapping(path = "/{userId}")
-    CustomerDetails getCustomerProfileByUserId(@PathVariable("userId") String userId)
-        throws Exception;
-    
+	
+	@PostMapping(path = CREATE_CUSTOMER_PROFILE)
+	void createUserProfile(@RequestBody CustomerDetails customerDetails,
+		@RequestHeader HttpHeaders headers) throws Exception;
+	
+	@GetMapping(path = "/{userId}")
+	CustomerDetails getCustomerProfileByUserId(@PathVariable("userId") String userId)
+		throws Exception;
+	
 }

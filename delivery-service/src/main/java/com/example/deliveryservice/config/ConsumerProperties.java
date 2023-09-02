@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Getter
 public class ConsumerProperties {
+	
 	private List<String> bootstrapServers;
 	private boolean enableAutoCommit;
 	private String valueDeserializer;
