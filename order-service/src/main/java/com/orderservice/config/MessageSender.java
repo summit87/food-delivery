@@ -1,5 +1,6 @@
 package com.orderservice.config;
 
+import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -26,11 +27,23 @@ public class MessageSender {
 		log.info("Message started to publishing into kafka for key {}",
 			key);
 		try {
-			ListenableFuture<SendResult<T, U>> send =
-				kafkaProducerTemplate.send(producerRecord);
+			
+			CompletableFuture<SendResult<T,U>> send = kafkaProducerTemplate.send(producerRecord);
 			final SettableListenableFuture future =
 				new SettableListenableFuture();
-			send.addCallback(new ListenableFutureCallback<SendResult<T, U>>() {
+			send.whenComplete((result, ex) -> {
+				if (ex == null) {
+					log.error("Failed to publish the message ", ex);
+					future.setException(ex);
+				} else {
+					log.info("Message sent on topic {} ,partion {},offset {}",
+						result.getRecordMetadata().topic(),
+						result.getRecordMetadata().partition(),
+						result.getRecordMetadata().offset());
+					future.set(null);
+				}
+			});
+			/*send.addCallback(new ListenableFutureCallback<SendResult<T, U>>() {
 				@Override
 				public void onFailure(Throwable ex) {
 					log.error("Failed to publish the message ", ex);
@@ -45,7 +58,7 @@ public class MessageSender {
 						result.getRecordMetadata().offset());
 					future.set(null);
 				}
-			});
+			});*/
 			return future;
 		} catch (Exception ex) {
 			log.error("Failed to send message to kafka for key {} ",

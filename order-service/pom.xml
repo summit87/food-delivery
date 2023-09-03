@@ -41,16 +41,8 @@
       <groupId>org.springframework.boot</groupId>
     </dependency>
     <dependency>
-      <artifactId>spring-boot-starter-webflux</artifactId>
+      <artifactId>spring-boot-starter-web</artifactId>
       <groupId>org.springframework.boot</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>spring-boot-admin-starter-client</artifactId>
-      <groupId>de.codecentric</groupId>
-    </dependency>
-    <dependency>
-      <artifactId>spring-boot-admin-starter-server</artifactId>
-      <groupId>de.codecentric</groupId>
     </dependency>
     <dependency>
       <artifactId>kafka-streams</artifactId>
@@ -111,6 +103,13 @@
       <groupId>com.google.collections</groupId>
       <version>1.0</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+    <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>5.2</version>
+    </dependency>
+
     <dependency>
       <artifactId>liquibase-core</artifactId>
       <groupId>org.liquibase</groupId>
@@ -125,6 +124,7 @@
       <groupId>com.commons</groupId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
+
     <dependency>
       <artifactId>spring-boot-starter-test</artifactId>
       <groupId>org.springframework.boot</groupId>
@@ -145,18 +145,17 @@
       <groupId>org.springframework.kafka</groupId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>jakarta.persistence</groupId>
+      <artifactId>jakarta.persistence-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
+      <version>4.4.16</version>
+    </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <artifactId>spring-boot-admin-dependencies</artifactId>
-        <groupId>de.codecentric</groupId>
-        <scope>import</scope>
-        <type>pom</type>
-        <version>${spring-boot-admin.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+
   <description>order-service</description>
   <groupId>com.example</groupId>
   <modelVersion>4.0.0</modelVersion>
@@ -165,7 +164,7 @@
     <artifactId>spring-boot-starter-parent</artifactId>
     <groupId>org.springframework.boot</groupId>
     <relativePath/>
-    <version>2.7.9</version> <!-- lookup parent from repository -->
+    <version>3.1.2</version>  <!-- lookup parent from repository -->
   </parent>
   <properties>
     <java.version>17</java.version>

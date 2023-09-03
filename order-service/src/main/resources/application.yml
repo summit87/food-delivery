@@ -20,6 +20,9 @@ spring:
     hikari:
       auto-commit: on
       connection-timeout: 3000
+  mvc:
+    problemdetails:
+      enabled: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
@@ -33,6 +36,19 @@ payment:
   service:
     base-url: http://localhost:9091
     create-payment: payment/processPayment
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
 
 
 
