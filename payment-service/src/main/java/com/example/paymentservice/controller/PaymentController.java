@@ -4,6 +4,7 @@ import com.commons.enums.Response;
 import com.commons.enums.Status;
 import com.commons.model.PaymentRequest;
 import com.commons.model.PaymentResponse;
+import com.commons.payment.OrderPaymentStatus;
 import com.commons.utils.GenericBuilder;
 import com.example.paymentservice.exception.PaymentFailedException;
 import com.example.paymentservice.model.PaymentStatusResponse;
@@ -32,7 +33,7 @@ public class PaymentController implements IPaymentController {
 	}
 	
 	@Override
-	public Response processPaymentRequest(PaymentRequest request) {
+	public Response<PaymentResponse> processPaymentRequest(PaymentRequest request) {
 		try {
 			
 			log.info("Payment started for order id {} ",
@@ -65,5 +66,13 @@ public class PaymentController implements IPaymentController {
 			log.error("Error while making payment ", ex);
 			throw new PaymentFailedException(ex.getMessage());
 		}
+	}
+	
+	@Override
+	public Response<OrderPaymentStatus> getPaymentStatus(String orderId, String restaurantId) {
+		return new Response.ResponseBuilder<OrderPaymentStatus>()
+			.responseBody(paymentServiceImpl.getPaymentStatus(orderId,restaurantId))
+			.status(Status.SUCCESS,"PS.001")
+			.build();
 	}
 }

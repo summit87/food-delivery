@@ -9,4 +9,5 @@ public class Constants {
 	public static final String EVENT_KEY_NAME = "EVENT_NAME";
 	
 	public static final String INITIATE_DELIVERY = "INITIATE_DELIVERY";
+	public static final String CLIENT_PROP_PREFIX_NAME="client.order.service";
 }

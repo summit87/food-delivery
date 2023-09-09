@@ -46,8 +46,8 @@ spring:
 client:
   order:
     service:
-      base-url: http://localhost:9090
-      post-payment-status-path: order/paymentStatus
+      base-url: http://localhost:8084/delivery
+      post-order-delivery-details: create
 
 
 

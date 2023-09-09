@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface PaymentServiceDAO
 	extends JpaRepository<PaymentStatusEntity, String> {
 	
+	PaymentStatusEntity findByOrderIdAndRestaurantId(String orderId,String restaurantId);
+	
 }

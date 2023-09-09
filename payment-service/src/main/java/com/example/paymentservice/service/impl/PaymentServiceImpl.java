@@ -2,10 +2,12 @@ package com.example.paymentservice.service.impl;
 
 import com.commons.enums.PaymentStatus;
 import com.commons.model.PaymentRequest;
+import com.commons.payment.OrderPaymentStatus;
 import com.commons.utils.GenericBuilder;
 import com.example.paymentservice.client.OrderServiceClient;
 import com.example.paymentservice.dao.PaymentServiceDAO;
 import com.example.paymentservice.entity.PaymentStatusEntity;
+import com.example.paymentservice.exception.PaymentNotFoundException;
 import com.example.paymentservice.model.PaymentStatusResponse;
 import com.example.paymentservice.model.PaymentStatusResponseFromOrderService;
 import com.example.paymentservice.service.IPaymentService;
@@ -64,5 +66,19 @@ public class PaymentServiceImpl implements IPaymentService {
 	public PaymentStatusResponseFromOrderService postPaymentStatusToOrderService(
 		PaymentStatusResponse request) throws JsonProcessingException {
 		return orderServiceClient.postPaymentStatusToOrderService(request);
+	}
+	
+	@Override
+	public OrderPaymentStatus getPaymentStatus(String orderId, String restaurantId) {
+		PaymentStatusEntity paymentStatus = paymentServiceDAO.findByOrderIdAndRestaurantId(orderId,
+			restaurantId);
+		if (paymentStatus == null) {
+			throw new PaymentNotFoundException(
+				String.format("no record found for order id %s", orderId));
+		}
+		return GenericBuilder.of(OrderPaymentStatus::new)
+			.with(OrderPaymentStatus::setPaymentStatus, paymentStatus.getPaymentStatus())
+			.with(OrderPaymentStatus::setTotalAmount, paymentStatus.getAmount())
+			.build();
 	}
 }
