@@ -6,6 +6,7 @@ import com.commons.model.PaymentResponse;
 import com.orderservice.config.PaymentServiceProperties;
 import com.orderservice.exception.PaymentFailedException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -35,8 +36,9 @@ public class PaymentServiceClient {
 	public PaymentResponse createAndProcessPayment(PaymentRequest paymentRequest) {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-		httpHeaders.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<PaymentRequest> entity = new HttpEntity<>(paymentRequest);
+		httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+		HttpEntity<PaymentRequest> entity = new HttpEntity<>(paymentRequest, httpHeaders);
+		
 		String url = String.format("%s/%s", paymentServiceProperties.getBaseUrl(),
 			paymentServiceProperties.getCreatePayment());
 		ResponseEntity<Response<PaymentResponse>> response

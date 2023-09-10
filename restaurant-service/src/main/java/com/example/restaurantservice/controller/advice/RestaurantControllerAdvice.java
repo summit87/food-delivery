@@ -3,6 +3,7 @@ package com.example.restaurantservice.controller.advice;
 import com.commons.enums.Response;
 import com.commons.response.ApiErrorResponse;
 import com.commons.utils.GenericBuilder;
+import com.example.restaurantservice.exception.DeliveryFailedException;
 import com.example.restaurantservice.exception.OrderNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class RestaurantControllerAdvice {
 	
 	@ExceptionHandler(value = {OrderNotFoundException.class})
 	
-	public ResponseEntity<Response> handleAllException(Exception ex,
+	public ResponseEntity<Response<ApiErrorResponse>> handleAllException(Exception ex,
 		WebRequest request) throws JsonProcessingException {
 		
 		ApiErrorResponse apiResponse = GenericBuilder
@@ -27,7 +28,7 @@ public class RestaurantControllerAdvice {
 			.with(ApiErrorResponse::setErrorMessage, ex.getMessage())
 			.with(ApiErrorResponse::setErrorCode, "OS.GET.0001")
 			.build();
-		Response response =
+		Response<ApiErrorResponse> response =
 			new Response.ResponseBuilder<ApiErrorResponse>()
 				.responseBody(apiResponse)
 				.build();
@@ -36,7 +37,7 @@ public class RestaurantControllerAdvice {
 	}
 	
 	@ExceptionHandler(value = {Exception.class})
-	public ResponseEntity<Response> handleAllException5XX(Exception ex,
+	public ResponseEntity<Response<ApiErrorResponse>> handleAllException5XX(Exception ex,
 		WebRequest request) throws JsonProcessingException {
 		
 		ApiErrorResponse apiResponse = GenericBuilder
@@ -45,11 +46,30 @@ public class RestaurantControllerAdvice {
 			.with(ApiErrorResponse::setErrorMessage, ex.getMessage())
 			.with(ApiErrorResponse::setErrorCode, "OS.GET.0002")
 			.build();
-		Response response =
-			new Response.ResponseBuilder()
+		Response<ApiErrorResponse> response =
+			new Response.ResponseBuilder<ApiErrorResponse>()
 				.responseBody(apiResponse)
 				.build();
 		
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(value = {DeliveryFailedException.class})
+	
+	public ResponseEntity<Response<ApiErrorResponse>> handleDeliveryException(Exception ex,
+		WebRequest request) throws JsonProcessingException {
+		
+		ApiErrorResponse apiResponse = GenericBuilder
+			.of(ApiErrorResponse::new)
+			.with(ApiErrorResponse::setErrorType, ex.getClass().getName())
+			.with(ApiErrorResponse::setErrorMessage, ex.getMessage())
+			.with(ApiErrorResponse::setErrorCode, "DELIVERY.POST.0001")
+			.build();
+		Response<ApiErrorResponse> response =
+			new Response.ResponseBuilder<ApiErrorResponse>()
+				.responseBody(apiResponse)
+				.build();
+		
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	}
 }

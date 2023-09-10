@@ -14,7 +14,9 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NoArgsConstructor
 public class DeliveryServiceStatus {
+	
 	String orderId;
 	String restaurantId;
 	DeliveryStatus deliveryStatus;
+	String deliveryId;
 }
