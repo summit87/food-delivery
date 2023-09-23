@@ -14,6 +14,9 @@
               <groupId>org.projectlombok</groupId>
             </exclude>
           </excludes>
+          <mainClass>
+            com.orderservice.OrderServiceApplication
+          </mainClass>
         </configuration>
         <groupId>org.springframework.boot</groupId>
       </plugin>
@@ -153,6 +156,11 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
       <version>4.4.16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.1.0</version>
     </dependency>
   </dependencies>
 

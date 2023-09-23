@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 8585
 order:
   kafka:
     producer:
@@ -15,7 +15,7 @@ spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/project1
     driver-class-name: org.postgresql.Driver
-    username: hydra
+    username: root
     password: ctrls.123
     hikari:
       auto-commit: on
@@ -48,6 +48,13 @@ management:
       show-details: always
       probes:
         enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui-custom.html
+    operations-sorter: method
+  api-docs:
+    path: /api-docs
 
 
 

@@ -70,8 +70,8 @@ public class ConsumerConfiguration {
 		ConcurrentKafkaListenerContainerFactory<String, String>
 			containerFactory =
 			new ConcurrentKafkaListenerContainerFactory<>();
-		containerFactory.setRecoveryCallback(recoveryCallback);
-		containerFactory.setRetryTemplate(kafkaRetryTemplate);
+
+
 		containerFactory.setConcurrency(consumerProperties.getConcurrency());
 		containerFactory.setConsumerFactory(consumerFactory());
 		containerFactory.getContainerProperties()

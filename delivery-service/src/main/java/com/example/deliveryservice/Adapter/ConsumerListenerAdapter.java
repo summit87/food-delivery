@@ -7,7 +7,7 @@ import com.example.deliveryservice.entity.DeliveryDetails;
 import com.example.deliveryservice.entity.DeliveryDetailsPk;
 import com.example.deliveryservice.service.DeliveryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.support.Acknowledgment;

@@ -29,7 +29,7 @@ spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/project1
     driver-class-name: org.postgresql.Driver
-    username: hydra
+    username: root
     password: ctrls.123
     hikari:
       auto-commit: on

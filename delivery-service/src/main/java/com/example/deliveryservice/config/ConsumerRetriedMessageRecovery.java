@@ -1,6 +1,6 @@
 package com.example.deliveryservice.config;
 
-import static org.springframework.kafka.listener.adapter.RetryingMessageListenerAdapter.CONTEXT_ACKNOWLEDGMENT;
+
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.retry.RecoveryCallback;
 import org.springframework.retry.RetryContext;
+
+import static org.springframework.integration.kafka.inbound.KafkaInboundEndpoint.CONTEXT_ACKNOWLEDGMENT;
 
 @Configuration
 @Qualifier("recoveryCallback")
