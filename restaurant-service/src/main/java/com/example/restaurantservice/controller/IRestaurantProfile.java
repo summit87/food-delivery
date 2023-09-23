@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import reactor.netty.http.server.HttpServerRequest;
 
 public interface IRestaurantProfile {
-    @PostMapping(path = "createProfile")
-    ResponseEntity<Response<RestaurantProfileResponse>> createRestaurantProfile(
-            @RequestBody RestaurantProfile restaurantProfile,
-            HttpServerRequest request,
-            @RequestHeader HttpHeaders headers);
+  @PostMapping(path = "createProfile")
+  ResponseEntity<Response<RestaurantProfileResponse>> createRestaurantProfile(
+      @RequestBody RestaurantProfile restaurantProfile,
+      HttpServerRequest request,
+      @RequestHeader HttpHeaders headers);
 }
