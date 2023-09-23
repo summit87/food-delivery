@@ -5,4 +5,5 @@
 
   <!--Added the entity Car-->
   <include file="crud/create-restaurant-detail.sql" relativeToChangelogFile="true"/>
+  <include file="crud/restaurant.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
