@@ -89,6 +89,11 @@
             <groupId>io.micrometer</groupId>
             <version>1.0.2</version>
         </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <artifactId>commons-lang3</artifactId>
