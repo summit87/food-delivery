@@ -24,3 +24,10 @@ logging:
     file: "{\"time\": \"%d\", \"level\": \"%p\", \"correlation-id\": \"%X{X-Correlation-Id}\", \"source\": \"%logger{63}:%L\", \"message\": \"%replace(%m%wEx{6}){'[\r\n]+', '\\n'}%nopex\"}%n"
   file:
     path: /tmp/customer
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+      base-path: /actuator

@@ -5,9 +5,11 @@ restaurant:
     consumer:
       bootstrap-servers:
         - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      client-id: restaurant-service
+      client-id: restaurant-service-client
       concurrency: 10 # To create only one consumer
       auto-offset-reset-config: latest
       max-poll-record-config: 10
@@ -17,7 +19,10 @@ restaurant:
       topic: RESTAURANT_SERVICE
       enable-auto-commit: false
     producer:
-      bootstrap-servers: http://localhost:9092
+      bootstrap-servers:
+        - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094s
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       client-id: restaurant-service
