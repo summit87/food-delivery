@@ -79,7 +79,7 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
   public CustomerDetails findCustomerProfileByEmailId(String emailId) throws Exception {
     CustomerProfileEntity profileEntity =
         customerProfileRepository
-            .findById(emailId)
+            .findByUserId(emailId)
             .orElseThrow(
                 () -> new RuntimeException(String.format("User id %s not found", emailId)));
     return GenericBuilder.of(CustomerDetails::new)
@@ -88,11 +88,28 @@ public class CustomerProfileServiceImpl implements CustomerProfileService {
             GenericBuilder.of(CustomerProfile::new)
                 .with(
                     CustomerProfile::setCustomerContact,
-                    GenericBuilder.of(CustomerContact::new).build())
+                    GenericBuilder.of(CustomerContact::new)
+                        .with(
+                            CustomerContact::setPrimaryMobileNumber,
+                            profileEntity.getPrimaryMobileNumber())
+                            .with(CustomerContact::setSecondaryMobileNumber,profileEntity.getSecondaryMobileNumber())
+                        .build())
                 .with(
                     CustomerProfile::setCustomerAddress,
-                    GenericBuilder.of(CustomerAddress::new).build())
-                .with(CustomerProfile::setName, GenericBuilder.of(Name::new).build())
+                    GenericBuilder.of(CustomerAddress::new)
+                        .with(CustomerAddress::setHouseNumber, profileEntity.getHouseNumber())
+                        .with(CustomerAddress::setZipCode, profileEntity.getZipCode())
+                        .with(CustomerAddress::setCountryCode, profileEntity.getCountryCode())
+                        .with(
+                            CustomerAddress::setNearestLandMark, profileEntity.getNearestLandMark())
+                        .with(CustomerAddress::setStreetName, profileEntity.getStreetName())
+                        .build())
+                .with(
+                    CustomerProfile::setName,
+                    GenericBuilder.of(Name::new)
+                        .with(Name::setFirstName, profileEntity.getFirstName())
+                        .with(Name::setLastName, profileEntity.getLastName())
+                        .build())
                 .build())
         .build();
   }

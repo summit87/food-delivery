@@ -84,15 +84,23 @@
             <groupId>org.springframework.boot</groupId>
             <optional>true</optional>
         </dependency>
+<!--        <dependency>-->
+<!--            <artifactId>micrometer-tracing-bridge-brave</artifactId>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <version>1.0.2</version>-->
+<!--        </dependency>-->
         <dependency>
-            <artifactId>micrometer-tracing-bridge-brave</artifactId>
             <groupId>io.micrometer</groupId>
-            <version>1.0.2</version>
+            <artifactId>micrometer-registry-otlp</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-            <scope>runtime</scope>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
