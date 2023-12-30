@@ -9,6 +9,8 @@ spring:
     hikari:
       auto-commit: on
       connection-timeout: 3000
+  application:
+    name: customer-service
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:

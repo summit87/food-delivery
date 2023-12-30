@@ -22,7 +22,7 @@ restaurant:
       bootstrap-servers:
         - http://localhost:9092
         - http://localhost:9093
-        - http://localhost:9094s
+        - http://localhost:9094
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       client-id: restaurant-service
@@ -56,6 +56,6 @@ client:
 
 
 
-logging:
-  pattern:
-    console: "{\"time\": \"%d\", \"level\": \"%p\", \"correlation-id\": \"%X{X-Correlation-Id}\", \"source\": \"%logger{63}:%L\", \"message\": \"%replace(%m%wEx{6}){'[\r\n]+', '\\n'}%nopex\"}%n"
+#logging:
+#  pattern:
+#    console: "{\"time\": \"%d\", \"level\": \"%p\", \"correlation-id\": \"%X{X-Correlation-Id}\", \"source\": \"%logger{63}:%L\", \"message\": \"%replace(%m%wEx{6}){'[\r\n]+', '\\n'}%nopex\"}%n"

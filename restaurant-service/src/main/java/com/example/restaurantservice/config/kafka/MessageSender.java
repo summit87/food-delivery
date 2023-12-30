@@ -52,7 +52,7 @@ public class MessageSender {
 				});
 			return future;
 		} catch (Exception ex) {
-			log.error("Failed to send message to kafka for key {} ", producerRecord.key());
+			log.error("Failed to send message to kafka for key {} ", producerRecord.key(),ex);
 			throw new RuntimeException(ex);
 		}
 	}

@@ -1,0 +1,162 @@
+@startuml
+interface com.example.paymentservice.controller.IPaymentController {
+~ Response<PaymentResponse> processPaymentRequest(PaymentRequest)
+~ Response<OrderPaymentStatus> getPaymentStatus(String,String)
+}
+class com.example.paymentservice.config.kafka.KafkaProducerConfig {
+- ProducerProperties producerProperties
++ KafkaTemplate<String,Object> kafkaProducerTemplate()
+- ProducerFactory<String,Object> producerProperties()
+}
+class com.example.paymentservice.utils.Constants {
++ {static} String CONSUMER_PROP_PREFIX_NAME
++ {static} String CLIENT_PROP_PREFIX_NAME
++ {static} String PRODUCER_PROP_PREFIX_NAME
++ {static} String RESTAURANT_SERVICE
+}
+class com.example.paymentservice.config.kafka.ProducerProperties {
+- List<String> bootstrapServers
+- String valueSerializer
+- String keySerializer
+- String clientId
+- String numberOfRetries
+- String retriesBackoffMsConfig
+- String maxRequestSizeConfig
+- String acksConfig
+}
+class com.example.paymentservice.config.kafka.OrderConsumerListener {
+- PaymentServiceUtils paymentServiceUtils
++ void orderConsumerListener(ConsumerRecord<String,String>,Acknowledgment)
+}
+class com.example.paymentservice.service.consumerUtils.PaymentServiceUtils {
+- PaymentServiceImpl paymentServiceImpl
+- ObjectMapper objectMapper
+- ProducerServiceUtils producerServiceUtils
++ void doOrderPayment(ConsumerRecord<String,String>,Acknowledgment)
+}
+class com.example.paymentservice.config.kafka.producer.RestaurantMessage {
+- String orderId
+- String restaurantId
+- BigDecimal amount
+- BigDecimal customerBillableAmount
+- PaymentStatus paymentStatus
+}
+class com.example.paymentservice.PaymentServiceApplication {
++ {static} void main(String[])
+}
+class com.example.paymentservice.exception.PaymentFailedException {
+}
+class com.example.paymentservice.config.kafka.ConsumerConfiguration {
+- ConsumerRetriedMessageRecovery recoveryCallback
+- RetryTemplate kafkaRetryTemplate
+- ConsumerProperties consumerProperties
+- Map<String,Object> consumerProperties()
++ KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String,String>> kafkaListenerContainerFactory()
++ ConsumerFactory<String,Object> consumerFactory()
+}
+class com.example.paymentservice.client.ClientProperties {
+- String baseUrl
+- String postPaymentStatusPath
+}
+class com.example.paymentservice.service.impl.PaymentServiceImpl {
+- PaymentServiceDAO paymentServiceDAO
+- OrderServiceClient orderServiceClient
++ PaymentStatusResponse savePaymentDetails(PaymentRequest)
++ PaymentStatusResponseFromOrderService postPaymentStatusToOrderService(PaymentStatusResponse)
++ OrderPaymentStatus getPaymentStatus(String,String)
+}
+class com.example.paymentservice.config.kafka.MessageSender {
+- KafkaTemplate kafkaProducerTemplate
++ SettableListenableFuture send(T,U,String,List<Header>)
+}
+class com.example.paymentservice.client.OrderServiceClient {
+- ClientProperties clientProperties
+- RestTemplate restTemplate
+- RetryTemplate retryTemplate
+- ObjectMapper objectMapper
++ PaymentStatusResponseFromOrderService postPaymentStatusToOrderService(PaymentStatusResponse)
+}
+class com.example.paymentservice.service.consumerUtils.ProducerServiceUtils {
+- MessageSender messageSender
+- ObjectMapper objectMapper
++ void publishEvent(PaymentStatusResponse)
+}
+class com.example.paymentservice.controller.PaymentController {
+- PaymentServiceImpl paymentServiceImpl
+- ObjectMapper objectMapper
+- ProducerServiceUtils producerServiceUtils
++ Response<PaymentResponse> processPaymentRequest(PaymentRequest)
++ Response<OrderPaymentStatus> getPaymentStatus(String,String)
+}
+class com.example.paymentservice.config.AppConfig {
++ RestTemplate restTemplate()
++ RetryTemplate retryTemplate()
++ ObjectMapper objectMapper()
+}
+class com.example.paymentservice.model.PaymentStatusRequestToOrderService {
+- String orderId
+- String txnId
+- PaymentStatus paymentStatus
+}
+class com.example.paymentservice.model.PaymentStatusResponse {
+- String orderId
+- String transactionId
+- BigDecimal amount
+- PaymentStatus paymentStatus
+- String restaurantId
+}
+interface com.example.paymentservice.dao.PaymentServiceDAO {
+~ PaymentStatusEntity findByOrderIdAndRestaurantId(String,String)
+}
+class com.example.paymentservice.model.PaymentStatusResponseFromOrderService {
+- String orderId
+- String txnId
+- OrderStatusEnum paymentStatus
+}
+class com.example.paymentservice.config.kafka.ConsumerProperties {
+- List<String> bootstrapServers
+- String topic
+- boolean enableAutoCommit
+- String valueDeserializer
+- String keyDeserializer
+- Integer concurrency
+- String consumerGroupId
+- String autoOffsetResetConfig
+- Integer maxPollRecordConfig
+- Integer sessionTimeout
+- Integer heartbeatInterval
+- String clientId
+}
+class com.example.paymentservice.utils.DatabaseConstants {
++ {static} String PAYMENT_STATUS
+}
+interface com.example.paymentservice.service.IPaymentService {
+~ PaymentStatusResponse savePaymentDetails(PaymentRequest)
+~ PaymentStatusResponseFromOrderService postPaymentStatusToOrderService(PaymentStatusResponse)
+~ OrderPaymentStatus getPaymentStatus(String,String)
+}
+class com.example.paymentservice.controller.advice.PaymentControllerAdvice {
++ ResponseEntity<Response> handleAllException(Exception,WebRequest)
++ ResponseEntity<Response> handleAllException5XX(Exception,WebRequest)
+}
+class com.example.paymentservice.exception.PaymentNotFoundException {
+}
+class com.example.paymentservice.entity.PaymentStatusEntity {
+- String txnId
+- String orderId
+- BigDecimal amount
+- String restaurantId
+- PaymentStatus paymentStatus
+}
+class com.example.paymentservice.config.kafka.ConsumerRetriedMessageRecovery {
++ Void recover(RetryContext)
+}
+
+
+com.example.paymentservice.exception.RuntimeException <|-- com.example.paymentservice.exception.PaymentFailedException
+com.example.paymentservice.service.IPaymentService <|.. com.example.paymentservice.service.impl.PaymentServiceImpl
+com.example.paymentservice.controller.IPaymentController <|.. com.example.paymentservice.controller.PaymentController
+org.springframework.data.jpa.repository.JpaRepository <|-- com.example.paymentservice.dao.PaymentServiceDAO
+com.example.paymentservice.exception.RuntimeException <|-- com.example.paymentservice.exception.PaymentNotFoundException
+org.springframework.retry.RecoveryCallback <|.. com.example.paymentservice.config.kafka.ConsumerRetriedMessageRecovery
+@enduml
