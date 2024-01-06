@@ -26,4 +26,7 @@ public class ConsumerProperties {
 	private Integer sessionTimeout;
 	private Integer heartbeatInterval;
 	private String clientId;
+	private Integer maxNumberOfRetry;
+	private Integer retryInterval;
+
 }

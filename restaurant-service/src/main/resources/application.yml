@@ -30,6 +30,8 @@ restaurant:
       retries-backoff-ms-config: 1000
       max-request-size-config: 10000000
       acks-config: 1
+      max-number-of-retry: 5
+      retry-interval: 1000
 spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/project1
