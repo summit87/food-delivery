@@ -94,11 +94,6 @@
       <groupId>org.projectlombok</groupId>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <artifactId>micrometer-tracing-bridge-brave</artifactId>
-      <groupId>io.micrometer</groupId>
-      <version>1.0.2</version>
-    </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
     <dependency>
       <artifactId>commons-lang3</artifactId>
@@ -148,6 +143,19 @@
       <artifactId>spring-kafka-test</artifactId>
       <groupId>org.springframework.kafka</groupId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-otlp</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-tracing-bridge-otel</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-exporter-otlp</artifactId>
     </dependency>
   </dependencies>
   <description>restaurant-service</description>
