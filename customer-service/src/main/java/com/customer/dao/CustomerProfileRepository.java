@@ -12,5 +12,4 @@ public interface CustomerProfileRepository extends
 	JpaRepository<CustomerProfileEntity, String> {
 
 	Optional<CustomerProfileEntity> findByUserId(String userId);
-	
 }
