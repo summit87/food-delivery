@@ -3,11 +3,14 @@ server:
 order:
   kafka:
     producer:
-      bootstrap-servers: http://localhost:9092
+      bootstrap-servers:
+        - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      client-id: order-service
-      number-of-retries: 3
+      client-id: order-service-client
+      number-of-retries: 3http://localhost:9092
       retries-backoff-ms-config: 1000
       max-request-size-config: 10000000
       acks-config: 1

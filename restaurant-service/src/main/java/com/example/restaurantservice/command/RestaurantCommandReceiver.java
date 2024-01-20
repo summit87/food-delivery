@@ -8,9 +8,9 @@ import com.example.restaurantservice.model.RestaurantEventDetails;
 import com.example.restaurantservice.service.utils.RestaurantProducerUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
-import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
@@ -34,7 +34,7 @@ public class RestaurantCommandReceiver {
 		this.objectMapper = objectMapper;
 		this.restaurantProducerUtils = restaurantProducerUtils;
 	}
-	
+
 	@Transactional(rollbackOn = Exception.class)
 	public void receiveCommand(
 		ConsumerRecord<String, String> consumerRecord, Acknowledgment acknowledgment)

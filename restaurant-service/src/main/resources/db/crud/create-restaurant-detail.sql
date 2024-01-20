@@ -2,41 +2,54 @@
 --changeset sumit:create-restaurant-detail.sql
 create table if not exists restaurant
 (
-    order_id varchar
+    order_id
+                            varchar(50) not null
+        constraint restaurant_details_pk
+            primary key,
+    restaurant_id           varchar(50),
+    delivery_id             varchar(20),
+    delivery_status         varchar(20),
+    payment_status          varchar(20),
+    restaurant_order_status varchar(20),
+    create_ts               timestamp,
+    last_updated_ts         timestamp,
+    create_by               varchar(20),
+    updated_by              varchar(20)
+);
+
+--changeset sumit:create-restaurant-profile
+create table if not exists restaurant_profile
 (
-    50
-) not null
-    constraint restaurant_details_pk
-    primary key,
-    restaurant_id varchar
-(
-    50
-),
-    delivery_id varchar
-(
-    20
-),
-    delivery_status varchar
-(
-    20
-),
-    payment_status varchar
-(
-    20
-),
-    restaurant_order_status varchar
-(
-    20
-),
-    create_ts timestamp,
+    restaurant_id
+                    varchar(50) not null
+        constraint restaurant_details_profile_pk
+            primary key,
+    restaurant_name varchar(50) not null unique ,
+    prmry_mob_num   varchar(20) not null unique ,
+    secndy_mob_num  varchar(20),
+    email_address   varchar(20),
+    create_ts       timestamp,
     last_updated_ts timestamp,
-    create_by varchar
+    create_by       varchar(20),
+    updated_by      varchar(20)
+);
+
+--changeset sumit:create-restaurant-profile-address
+create table if not exists restaurant_address
 (
-    20
-),
-    updated_by varchar
-(
-    20
-)
-    );
+    restaurant_address_id
+                    varchar(50) not null
+        constraint restaurant_details_address_pk
+            primary key,
+    restaurant_id   varchar(50) not null,
+    address         varchar(50),
+    street_name     varchar(20),
+    landmark        varchar(20),
+    pin_code        varchar(20),
+    create_ts       timestamp,
+    last_updated_ts timestamp,
+    create_by       varchar(20),
+    updated_by      varchar(20),
+    foreign key (restaurant_id) references restaurant_profile (restaurant_id)
+);
 

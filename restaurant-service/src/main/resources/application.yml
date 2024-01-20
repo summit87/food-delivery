@@ -5,9 +5,11 @@ restaurant:
     consumer:
       bootstrap-servers:
         - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      client-id: restaurant-service
+      client-id: restaurant-service-client
       concurrency: 10 # To create only one consumer
       auto-offset-reset-config: latest
       max-poll-record-config: 10
@@ -17,7 +19,10 @@ restaurant:
       topic: RESTAURANT_SERVICE
       enable-auto-commit: false
     producer:
-      bootstrap-servers: http://localhost:9092
+      bootstrap-servers:
+        - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       client-id: restaurant-service
@@ -25,6 +30,8 @@ restaurant:
       retries-backoff-ms-config: 1000
       max-request-size-config: 10000000
       acks-config: 1
+      max-number-of-retry: 5
+      retry-interval: 1000
 spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/project1
@@ -43,6 +50,8 @@ spring:
             non_contextual_creation: true
   liquibase:
     change-log: classpath:/db/liquibase-changeLog.xml
+  application:
+    name: restaurant-service
 client:
   order:
     service:
@@ -51,6 +60,26 @@ client:
 
 
 
-logging:
-  pattern:
-    console: "{\"time\": \"%d\", \"level\": \"%p\", \"correlation-id\": \"%X{X-Correlation-Id}\", \"source\": \"%logger{63}:%L\", \"message\": \"%replace(%m%wEx{6}){'[\r\n]+', '\\n'}%nopex\"}%n"
+#logging:
+#  pattern:
+#    console: "{\"time\": \"%d\", \"level\": \"%p\", \"correlation-id\": \"%X{X-Correlation-Id}\", \"source\": \"%logger{63}:%L\", \"message\": \"%replace(%m%wEx{6}){'[\r\n]+', '\\n'}%nopex\"}%n"
+
+management:
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+        step: 10s
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    prometheus:
+      enabled: true
+

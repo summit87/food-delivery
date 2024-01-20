@@ -5,9 +5,11 @@ payment:
     consumer:
       bootstrap-servers:
         - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      client-id: payment-service
+      client-id: payment-service-client
       concurrency: 10 # To create only one consumer
       auto-offset-reset-config: latest
       max-poll-record-config: 10
@@ -17,10 +19,13 @@ payment:
       topic: ORDER_STATUS
       enable-auto-commit: false
     producer:
-      bootstrap-servers: http://localhost:9092
+      bootstrap-servers:
+        - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      client-id: order-service
+      client-id: payment-service
       number-of-retries: 3
       retries-backoff-ms-config: 1000
       max-request-size-config: 10000000

@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RestaurantAddress {
 	
-	String name;
+	String address;
 	String streetName;
 	String nearestLandMark;
 	String pinCode;

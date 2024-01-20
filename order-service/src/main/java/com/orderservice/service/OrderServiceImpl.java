@@ -66,7 +66,7 @@ public class OrderServiceImpl implements IOrderService {
 		HttpHeaders headers) {
 		
 		String orderId = createOrderId();
-		String restaurantId = createRestaurantId();
+		String restaurantId = orderCreateRequest.getRestaurantId();
 		OrderDetails orderDetailsBuilder =
 			GenericBuilder.of(OrderDetails::new)
 				.with(OrderDetails::setOrderId, orderId)

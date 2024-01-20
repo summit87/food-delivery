@@ -5,9 +5,11 @@ delivery:
     consumer:
       bootstrap-servers:
         - http://localhost:9092
+        - http://localhost:9093
+        - http://localhost:9094
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      client-id: delivery-service
+      client-id: delivery-service-client
       concurrency: 10 # To create only one consumer
       auto-offset-reset-config: latest
       max-poll-record-config: 10
@@ -22,7 +24,7 @@ delivery:
       bootstrap-servers: http://localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      client-id: order-service
+      client-id: delivery-service-1
       number-of-retries: 3
       retries-backoff-ms-config: 1000
       max-request-size-config: 10000000
