@@ -50,6 +50,8 @@ spring:
             non_contextual_creation: true
   liquibase:
     change-log: classpath:/db/liquibase-changeLog.xml
+  application:
+    name: restaurant-service
 client:
   order:
     service:
